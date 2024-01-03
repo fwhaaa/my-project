@@ -4,6 +4,7 @@ import ErrorPage from './error-page';
 import Contact from './routes/contact';
 import FormDemo from './routes/form-demo';
 import StudentAdd from './routes/student-management/student-add';
+import StudentList from './routes/student-management/student-list';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -28,6 +29,11 @@ const router = createBrowserRouter([
       {
         path: "student/management/add",
         element: <StudentAdd />
+               
+      },
+      {
+        path: "student/management/list",
+        element: <StudentList />
                
       },
       {

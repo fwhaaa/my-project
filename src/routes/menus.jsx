@@ -35,7 +35,7 @@ function Menus() {
                 <Link to={`student/management/add`}>
                  <MenuItem key='0_0'>添加学生</MenuItem>
                 </Link>
-                <Link to={`contacts/2`}>
+                <Link to={`student/management/list`}>
                  <MenuItem key='0_1'>学生列表</MenuItem>
                 </Link>
 
