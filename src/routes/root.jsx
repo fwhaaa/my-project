@@ -1,57 +1,20 @@
-import { Outlet, Link, useLoaderData, Form} from "react-router-dom";
-import { getContacts, createContact } from "../contacts";
+import { Layout } from '@arco-design/web-react';
+const Sider = Layout.Sider;
+const Content = Layout.Content;
+import Menus from './menus';
+import { Outlet } from 'react-router-dom';
 
-export async function action() {
-    const contact = await createContact();
-    return { contact };
-}
-  
-export async function loader() {
-    const contacts = await getContacts();
-    return { contacts };
-}
+const App = () => {
+  return (
+    <div className='layout-basic-demo'>
+      <Layout style={{ height: '400px' }}>
+        <Layout>
+          <Sider><Menus /></Sider>
+          <Content><Outlet /></Content>
+        </Layout>
+      </Layout>
+    </div>
+  );
+};
 
-export default function Root() {
-    const {contacts} = useLoaderData();
-    console.log("rootcontacts", contacts);
-    return (
-      <>
-        <div id="sidebar">
-          <h1>React Router Contacts</h1>
-          <div>
-            <nav>
-                {contacts.length ? (
-                    <ul>
-                    {contacts.map((contact) => (
-                        <li key={contact.id}>
-                        <Link to={`contacts/${contact.id}`}>
-                            {contact.first || contact.last ? (
-                            <>
-                                {contact.first} {contact.last}
-                            </>
-                            ) : (
-                            <i>No Name</i>
-                            )}{" "}
-                            {contact.favorite && <span>★</span>}
-                        </Link>
-                        </li>
-                    ))}
-                    </ul>
-                 ) : (
-                    <p>
-                    <i>No contacts</i>
-                    </p>
-                )}
-            </nav>
-            <Form method="post">
-                <button type="submit">New</button>
-            </Form>
-          </div>
- 
-        </div>
-        <div id="detail">
-            <Outlet />
-        </div>
-      </>
-    );
-  }
+export default App;

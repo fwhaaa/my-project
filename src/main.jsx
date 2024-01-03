@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client'
 import ErrorPage from './error-page';
 import Contact from './routes/contact';
 import FormDemo from './routes/form-demo';
+import StudentAdd from './routes/student-management/student-add';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import './index.css';
-import Root, { loader as rootLoader, action as rootAction } from "./routes/root";
+// import Root, { loader as rootLoader, action as rootAction } from "./routes/root";
+import Root from './routes/root';
 import "@arco-design/web-react/dist/css/arco.css";
 
 const router = createBrowserRouter([
@@ -16,17 +18,23 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
-    loader: rootLoader,
-    action: rootAction,
+    // loader: rootLoader,
+    // action: rootAction,
     children:[
       {
-        path:"contacts/:contactId",
-        element:<Contact />,
+        path: "contacts/:contactId",
+        element: <Contact />,
+      },
+      {
+        path: "student/management/add",
+        element: <StudentAdd />
+               
       },
       {
         path:"form/demo",
         element:<FormDemo />,    
-      }
+      },
+      
     ]
   },
 
