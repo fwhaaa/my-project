@@ -11,7 +11,7 @@ export async function loader() {
     return { contacts };
 }
 
-export default function Root() {
+export default function App() {
     const {contacts} = useLoaderData();
     console.log("rootcontacts", contacts);
     return (

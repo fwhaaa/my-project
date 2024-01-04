@@ -13,6 +13,8 @@ import './index.css';
 // import Root, { loader as rootLoader, action as rootAction } from "./routes/root";
 import Root from './routes/root';
 import "@arco-design/web-react/dist/css/arco.css";
+import TeacherAdd from './routes/teacher-management/teacher-add';
+import TeachertList from './routes/teacher-management/teacher-list';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,16 @@ const router = createBrowserRouter([
       {
         path: "student/management/list",
         element: <StudentList />
+               
+      },
+      {
+        path: "teacher/management/add",
+        element: <TeacherAdd />
+               
+      },
+      {
+        path: "teacher/management/list",
+        element: <TeachertList />
                
       },
       {

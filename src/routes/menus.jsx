@@ -1,25 +1,18 @@
-import { useState } from 'react';
-import { Menu, Slider } from '@arco-design/web-react';
-import { IconApps,} from '@arco-design/web-react/icon';
+import { Menu } from '@arco-design/web-react';
+import { IconBook, IconPenFill, IconUser, IconUserAdd, IconUserGroup } from '@arco-design/web-react/icon';
 import { Link } from "react-router-dom";
+import './menu.css'
 
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
 
 function Menus() {
-  const [width, setWidth] = useState(240);
+  
   return (
-    <div className='menu-demo' style={{ height: 600 }}>
-      <Slider
-        style={{ width: 320, marginBottom: 24 }}
-        value={width}
-        onChange={(value) => setWidth(value)}
-        step={10}
-        min={160}
-        max={400}
-      />
+    <div className='menu-demo' style={{ height: '100%', }}>
+      
       <Menu
-        style={{ width: width, height: 'calc(100% - 28px)' }}
+        style={{ width: '200px', height: '100%' }}
         hasCollapseButton
         defaultOpenKeys={['0']}
         defaultSelectedKeys={['0_1']}
@@ -28,15 +21,15 @@ function Menus() {
           key='0'
           title={
             <>
-              <IconApps /> 学生管理
+              <IconUser />学生管理
             </>
           }
         >
                 <Link to={`student/management/add`}>
-                 <MenuItem key='0_0'>添加学生</MenuItem>
+                 <MenuItem key='0_0'><IconUserAdd />添加学生</MenuItem>
                 </Link>
                 <Link to={`student/management/list`}>
-                 <MenuItem key='0_1'>学生列表</MenuItem>
+                 <MenuItem key='0_1'><IconUserGroup />学生列表</MenuItem>
                 </Link>
 
         </SubMenu>
@@ -45,15 +38,15 @@ function Menus() {
           key='1'
           title={
             <>
-              <IconApps /> 教师管理
+              <IconUser /> 教师管理
             </>
           }
         >
-                <Link to={`contacts/1`}>
-                 <MenuItem key='1_0'>添加教师</MenuItem>
+                <Link to={`teacher/management/add`}>
+                 <MenuItem key='1_0'><IconUserAdd />添加教师</MenuItem>
                 </Link>
-                <Link to={`contacts/2`}>
-                 <MenuItem key='1_1'>教师列表</MenuItem>
+                <Link to={`teacher/management/list`}>
+                 <MenuItem key='1_1'><IconUserGroup />教师列表</MenuItem>
                 </Link>
 
         </SubMenu>
@@ -62,7 +55,7 @@ function Menus() {
           key='2'
           title={
             <>
-              <IconApps /> 考试管理
+              <IconPenFill /> 考试管理
             </>
           }
         >
@@ -78,7 +71,7 @@ function Menus() {
           key='3'
           title={
             <>
-              <IconApps /> 题库管理
+              <IconBook />题库管理
             </>
           }
         >
