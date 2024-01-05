@@ -11,6 +11,9 @@ const StudentAdd = () => {
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
 
+
+
+
   function sendData(data) {
     console.log(data);
     return new Promise(resolve =>{
@@ -18,25 +21,35 @@ const StudentAdd = () => {
     });
 
   }
+ 
+
   async function handSubmit() {
     console.log("handsubmit");
     console.log(form.getFieldsValue());
     try {
       await form.validate();
-      Message.success('校验通过');
+      Message.loading({
+        id: 'student_add',
+        content: '正在添加' 
+        });
       setIsSending(true);
       await sendData(JSON.stringify(form.getFieldsValue()));
       setIsSending(false);
       setIsSent(true);
     } catch (e) {
       Message.error('校验失败');
-      
+
     }
 
   }
-
   if (isSent) {
-    return <h1>THANKS FOR ADD</h1>
+    Message.success({
+      id: 'student_add',
+      content: '添加成功!',
+    })
+    setIsSent(false);
+  
+    
   }
   return (
     <div>
@@ -48,13 +61,10 @@ const StudentAdd = () => {
           <Input placeholder='输入学生学号' />
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
-
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
-          <Button disabled={isSending} type='primary'  onClick={handSubmit}  icon={<IconPlus />} >提交</Button>
-
+          <Button disabled={isSending} loading={isSending} type='primary'  onClick={handSubmit}   icon={<IconPlus /> } >提交</Button>
         </FormItem>
-        {isSending && <p>Sending...</p>  }
       </Form>
     </div>
   );

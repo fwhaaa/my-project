@@ -1,7 +1,9 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb } from '@arco-design/web-react';
 import Menus from './menus';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
+import { PageHeader, Radio } from '@arco-design/web-react';
+import Head from './head';
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -27,18 +29,12 @@ class Root extends React.Component {
         </Sider>
         <Layout>
           <Header>
+            <Head></Head>
           </Header>
-          <Layout style={{ padding: '0 24px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>List</Breadcrumb.Item>
-              <Breadcrumb.Item>App</Breadcrumb.Item>
-            </Breadcrumb>
             <Content><Outlet /></Content>
-  
           </Layout>
         </Layout>
-      </Layout>
+     
     );
   }
 }
