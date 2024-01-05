@@ -1,28 +1,22 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 
 
 const FormItem = Form.Item;
-
-
-const StudentAdd = () => {
-  const [ isSending, setIsSending ] = useState(false);
-  const [ isSent, setIsSent ] = useState(false);
-  const [ form ] =Form.useForm();
-
-
-
-
+const StudentAdd = ({addStudent,list,name}) => {
+console.log('12sad',list);
+console.log('name',name)
+const [ isSending, setIsSending ] = useState(false);
+const [ isSent, setIsSent ] = useState(false);
+const [ form ] =Form.useForm();
   function sendData(data) {
     console.log(data);
     return new Promise(resolve =>{
       setTimeout(resolve,2000);
     });
-
   }
  
-
   async function handSubmit() {
     console.log("handsubmit");
     console.log(form.getFieldsValue());
@@ -34,10 +28,12 @@ const StudentAdd = () => {
         });
       setIsSending(true);
       await sendData(JSON.stringify(form.getFieldsValue()));
+      // addStudent([JSON.stringify(form.getFieldsValue())]);
       setIsSending(false);
       setIsSent(true);
     } catch (e) {
       Message.error('校验失败');
+      console.log(e);
 
     }
 

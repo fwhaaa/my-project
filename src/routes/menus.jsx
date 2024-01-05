@@ -15,7 +15,7 @@ function Menus() {
         style={{ width: '200px', height: '100%' }}
         hasCollapseButton
         defaultOpenKeys={['0']}
-        defaultSelectedKeys={['0_1']}
+        defaultSelectedKeys={['0_0']}
       >
         <SubMenu
           key='0'

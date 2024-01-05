@@ -15,27 +15,33 @@ import Root from './routes/root';
 import "@arco-design/web-react/dist/css/arco.css";
 import TeacherAdd from './routes/teacher-management/teacher-add';
 import TeachertList from './routes/teacher-management/teacher-list';
+import StudentMangementIndex from './routes/student-management';
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
-    // loader: rootLoader,
-    // action: rootAction,
     children:[
       {
         path: "contacts/:contactId",
         element: <Contact />,
       },
       {
-        path: "student/management/add",
-        element: <StudentAdd />
-               
-      },
-      {
-        path: "student/management/list",
-        element: <StudentList />
+        path: "student/management",
+        element: <StudentMangementIndex />,
+        children:[ 
+          {
+            path: "add",
+            element: <StudentAdd />,
+          },
+          {
+            path: "list",
+            element: <StudentList />
+          },
+
+        ]
                
       },
       {

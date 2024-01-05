@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, Empty  } from '@arco-design/web-react';
+import { Table, Empty } from '@arco-design/web-react';
 const columns = [
   {
     title: '姓名',
