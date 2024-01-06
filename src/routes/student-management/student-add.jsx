@@ -1,12 +1,11 @@
-import { useReducer, useState } from 'react';
+import { useReducer, useState, useContext} from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-
+import { globalDispatchContext } from '../../globalContext';
 
 const FormItem = Form.Item;
-const StudentAdd = ({addStudent,list,name}) => {
-console.log('12sad',list);
-console.log('name',name)
+const StudentAdd = () => {
+const dispatch = useContext(globalDispatchContext);
 const [ isSending, setIsSending ] = useState(false);
 const [ isSent, setIsSent ] = useState(false);
 const [ form ] =Form.useForm();
@@ -18,7 +17,6 @@ const [ form ] =Form.useForm();
   }
  
   async function handSubmit() {
-    console.log("handsubmit");
     console.log(form.getFieldsValue());
     try {
       await form.validate();
@@ -27,8 +25,11 @@ const [ form ] =Form.useForm();
         content: '正在添加' 
         });
       setIsSending(true);
+      await dispatch({
+        type: 'add',
+        text: JSON.stringify(form.getFieldsValue())
+      })
       await sendData(JSON.stringify(form.getFieldsValue()));
-      // addStudent([JSON.stringify(form.getFieldsValue())]);
       setIsSending(false);
       setIsSent(true);
     } catch (e) {
@@ -50,14 +51,23 @@ const [ form ] =Form.useForm();
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
-        <FormItem field={'name'}  disabled={isSending} label='姓名'  rules={[{ required: true }]}>
-          <Input placeholder='输入学生姓名' />
-        </FormItem>
-        <FormItem field={'number'}  disabled={isSending} label='学号'  rules={[{ required: true }]}>
+      <FormItem field={'id'}  disabled={isSending} label='学号'  rules={[{ required: true }]}>
           <Input placeholder='输入学生学号' />
         </FormItem>
+        <FormItem field={'StudentName'}  disabled={isSending} label='姓名'  rules={[{ required: true }]}>
+          <Input placeholder='输入学生姓名' />
+        </FormItem>
+        <FormItem field={'address'}  disabled={isSending} label='地址' rules={[{ required: true }]} >
+          <Input placeholder='输入地址' />
+        </FormItem>
+        <FormItem field={'email'}  disabled={isSending} label='邮箱' rules={[{ required: true }]} >
+          <Input placeholder='输入邮箱' />
+        </FormItem>
+        
+        
         <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>
+        
         <FormItem wrapperCol={{ offset: 5 }}>
           <Button disabled={isSending} loading={isSending} type='primary'  onClick={handSubmit}   icon={<IconPlus /> } >提交</Button>
         </FormItem>
