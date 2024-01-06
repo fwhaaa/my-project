@@ -2,20 +2,33 @@ import { Menu } from '@arco-design/web-react';
 import { IconBook, IconPenFill, IconUser, IconUserAdd, IconUserGroup } from '@arco-design/web-react/icon';
 import { Link } from "react-router-dom";
 import './menu.css'
+import { useState } from 'react';
 
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
 
 function Menus() {
-  
+  const [openKeys, setOpenKeys] = useState(['0']);
+  const [selectedKeys, setSelectedKeys] = useState(['0_0']);
+  console.log('openkeys',openKeys);
   return (
     <div className='menu-demo' style={{ height: '100%', }}>
       
       <Menu
         style={{ width: '200px', height: '100%' }}
         hasCollapseButton
-        defaultOpenKeys={[]}
-        defaultSelectedKeys={[]}
+        // defaultOpenKeys={['0_0']}
+        // defaultSelectedKeys={['0_0']}
+        openKeys={openKeys}
+        selectedKeys={selectedKeys}
+        onClickSubMenu={( key ) => {
+          if (openKeys.find(v => v===key)){
+            const newKeys = openKeys.filter(v=> v!==key)
+            setOpenKeys(newKeys);
+          } else {
+            setOpenKeys([...openKeys,key])
+          }
+        }}
       >
         <SubMenu
           key='0'
