@@ -1,16 +1,25 @@
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from "react-router-dom";
 import { Menu } from '@arco-design/web-react';
 import { IconBook, IconPenFill, IconUser, IconUserAdd, IconUserGroup } from '@arco-design/web-react/icon';
-import { Link } from "react-router-dom";
 import './menu.css'
-import { useState } from 'react';
+
 
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
 
 function Menus() {
-  const [openKeys, setOpenKeys] = useState(['0']);
-  const [selectedKeys, setSelectedKeys] = useState(['0_0']);
-  console.log('openkeys',openKeys);
+  const [openKeys, setOpenKeys] = useState(['student_management']);
+  const [selectedKeys, setSelectedKeys] = useState(['student_management_add']);
+  const location =useLocation();
+  useEffect(() => {
+    const arr =location.pathname.split('/');
+      arr.shift()
+      setSelectedKeys([arr.join('_')])
+      arr.pop();
+      setOpenKeys([arr.join('_')])
+  }, [location]);
+  
   return (
     <div className='menu-demo' style={{ height: '100%', }}>
       
@@ -29,9 +38,14 @@ function Menus() {
             setOpenKeys([...openKeys,key])
           }
         }}
+        onClickMenuItem={(key) => {
+          console.log('key',key)
+          setSelectedKeys([key])
+      
+        }}
       >
         <SubMenu
-          key='0'
+          key='student_management'
           title={
             <>
               <IconUser />学生管理
@@ -39,16 +53,16 @@ function Menus() {
           }
         >
                 <Link to={`student/management/add`}>
-                 <MenuItem key='0_0'><IconUserAdd />添加学生</MenuItem>
+                 <MenuItem key='student_management_add'><IconUserAdd />添加学生</MenuItem>
                 </Link>
                 <Link to={`student/management/list`}>
-                 <MenuItem key='0_1'><IconUserGroup />学生列表</MenuItem>
+                 <MenuItem key='student_management_list'><IconUserGroup />学生列表</MenuItem>
                 </Link>
 
         </SubMenu>
 
         <SubMenu
-          key='1'
+          key='teacher_management'
           title={
             <>
               <IconUser /> 教师管理
@@ -56,10 +70,10 @@ function Menus() {
           }
         >
                 <Link to={`teacher/management/add`}>
-                 <MenuItem key='1_0'><IconUserAdd />添加教师</MenuItem>
+                 <MenuItem key='teacher_management_add'><IconUserAdd />添加教师</MenuItem>
                 </Link>
                 <Link to={`teacher/management/list`}>
-                 <MenuItem key='1_1'><IconUserGroup />教师列表</MenuItem>
+                 <MenuItem key='teacher_management_list'><IconUserGroup />教师列表</MenuItem>
                 </Link>
 
         </SubMenu>

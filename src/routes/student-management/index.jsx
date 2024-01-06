@@ -88,8 +88,6 @@ export default function  StudentMangementIndex(){
     })
   }
   
-
-
   console.log('tasks',tasks)
   return(
       <globalContext.Provider value={tasks}>
