@@ -3,7 +3,7 @@ import { Layout, Menu, Breadcrumb } from '@arco-design/web-react';
 import Menus from './menus';
 import { Link, Outlet } from 'react-router-dom';
 import { PageHeader, Radio } from '@arco-design/web-react';
-import Head from './head';
+import Head from './header';
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -25,7 +25,6 @@ class Root extends React.Component {
       <Layout className='layout-collapse-demo'>
         <Sider style={{width:'auto'}}>
           <Menus></Menus>
-       
         </Sider>
         <Layout>
           <Header>

@@ -9,25 +9,24 @@ const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
 
 function Menus() {
-  const [openKeys, setOpenKeys] = useState(['student_management']);
-  const [selectedKeys, setSelectedKeys] = useState(['student_management_add']);
+  const [openKeys, setOpenKeys] = useState([]);
+  const [selectedKeys, setSelectedKeys] = useState([]);
   const location =useLocation();
   useEffect(() => {
     const arr =location.pathname.split('/');
       arr.shift()
       setSelectedKeys([arr.join('_')])
       arr.pop();
-      setOpenKeys([arr.join('_')])
-  }, [location]);
+      setOpenKeys([...openKeys,arr.join('_')])
+  }, []);
   
   return (
     <div className='menu-demo' style={{ height: '100%', }}>
       
       <Menu
+        theme='dark'
         style={{ width: '200px', height: '100%' }}
         hasCollapseButton
-        // defaultOpenKeys={['0_0']}
-        // defaultSelectedKeys={['0_0']}
         openKeys={openKeys}
         selectedKeys={selectedKeys}
         onClickSubMenu={( key ) => {
@@ -39,9 +38,7 @@ function Menus() {
           }
         }}
         onClickMenuItem={(key) => {
-          console.log('key',key)
           setSelectedKeys([key])
-      
         }}
       >
         <SubMenu

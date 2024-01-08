@@ -1,11 +1,10 @@
-import { Form, Input, Button, Checkbox } from '@arco-design/web-react';
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import { Outlet } from 'react-router-dom';
 import { globalContext, globalDispatchContext } from '../../globalContext';
 
 function tasksReducer(tasks, action){
-  console.log('action.type',action.type)
-  console.log('action.text',action.text)
+  console.log('action',action)
+
   switch (action.type){
     case 'add':{
       return [ ...tasks, JSON.parse(action.text) ];
@@ -21,6 +20,9 @@ function tasksReducer(tasks, action){
     }
     case 'delete': {
        return tasks.filter(t => t.id!== action.id)
+    }
+    case  'search': {
+       return tasks.filter(t => t.StudentName.includes(action.StudentName))
     }
     default: {
       throw Error('Unknow action ' + action.type)
@@ -88,6 +90,7 @@ export default function  StudentMangementIndex(){
     })
   }
   
+
   console.log('tasks',tasks)
   return(
       <globalContext.Provider value={tasks}>
