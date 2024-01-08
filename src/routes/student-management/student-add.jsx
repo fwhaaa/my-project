@@ -1,4 +1,4 @@
-import { useReducer, useState, useContext} from 'react';
+import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { globalDispatchContext } from '../../globalContext';
@@ -10,15 +10,11 @@ const FormItem = Form.Item;
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
     function sendData(data) {
-        console.log(data);
         return new Promise(resolve =>{
           setTimeout(resolve,2000);
         });
       }
-
-
       const [email, setEmail] = useState([]);
-    
       const handleSearch = (inputValue) => {
         const mail=[
           '@qq.com',
@@ -27,7 +23,6 @@ const FormItem = Form.Item;
           '@xxx.com'
         ];
         setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
-        // setEmail(inputValue ? new Array(5).fill(null).map((_, index) => `${inputValue}_${index}`) : []);
       }
   async function handSubmit() {
     try {
@@ -47,9 +42,7 @@ const FormItem = Form.Item;
     } catch (e) {
       Message.error('校验失败');
       console.log(e);
-
     }
-
   }
   if (isSent) {
     Message.success({
@@ -57,8 +50,6 @@ const FormItem = Form.Item;
       content: '添加成功!',
     })
     setIsSent(false);
-  
-    
   }
   return (
     <div>
@@ -80,11 +71,8 @@ const FormItem = Form.Item;
             defaultActiveFirstOption={true}
             />
         </FormItem>
-        
-        
         <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>
-        
         <FormItem wrapperCol={{ offset: 5 }}>
           <Button disabled={isSending} loading={isSending} type='primary'  onClick={handSubmit}   icon={<IconPlus /> } >提交</Button>
         </FormItem>

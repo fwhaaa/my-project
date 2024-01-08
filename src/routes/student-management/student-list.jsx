@@ -1,17 +1,17 @@
-import { useContext, useState } from 'react';
-import { Table, Empty, Button, Input } from '@arco-design/web-react';
+import { useContext, useEffect, useState } from 'react';
+import { Table, Button, Input } from '@arco-design/web-react';
 import { globalContext } from '../../globalContext';
 import { globalDispatchContext } from '../../globalContext';
 
 const InputSearch = Input.Search;
-
 function StudentList() {
   const dispatch = useContext(globalDispatchContext);
-  const [type] = useState('checkbox');
-  const [selectedRowKeys, setSelectedRowKeys] = useState(['4']);
   const tasks = useContext(globalContext);
-  console.log('tasks: ',tasks)
-
+  const [data, setData] = useState(tasks);
+  useEffect(()=>{
+      setData(tasks)
+  },[tasks])
+  
   const columns = [
     {
       title: '姓名',
@@ -41,7 +41,6 @@ function StudentList() {
   ];
   
   async function DeleteList(item){
-    console.log('item',item)
     await dispatch(
      {
       type: 'delete',
@@ -50,34 +49,18 @@ function StudentList() {
     )
   }
   
-   function handleSearch(){
-    
+  async function handleSearch(search){
+    setData(tasks.filter(t => t.StudentName.includes(search)));
   }
 
   return (
     <div>
-      <InputSearch/>
+       <InputSearch onChange={handleSearch} allowClear placeholder='Enter keyword to search' style={{ width: 350 }} />
       
       <Table
         rowKey='id'
         columns={columns}
-        data={tasks}
-        rowSelection={{
-          type,
-          selectedRowKeys,
-          onChange: (selectedRowKeys, selectedRows) => {
-            console.log('onChange:', selectedRowKeys, selectedRows);
-            setSelectedRowKeys(selectedRowKeys);
-          },
-          onSelect: (selected, record, selectedRows) => {
-            console.log('onSelect:', selected, record, selectedRows);
-          },
-          checkboxProps: (record) => {
-            return {
-              disabled: record.id === '4',
-            };
-          },
-        }}
+        data={data}
       />
       
     </div>
