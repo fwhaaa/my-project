@@ -1,14 +1,16 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { globalDispatchContext } from './globalContext';
+import { globalDispatchContext, globalContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
 const FormItem = Form.Item;
   const StudentAdd = () => {
   const dispatch = useContext(globalDispatchContext);
+  const tasks =useContext(globalContext)
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
+
     function sendData(data) {
         return new Promise(resolve =>{
           setTimeout(resolve,2000);
@@ -27,6 +29,12 @@ const FormItem = Form.Item;
   async function handSubmit() {
     try {
       await form.validate();
+      const isExist = tasks.some((v)=>v.id === form.getFieldValue('id') );
+      if(isExist){
+        Message.error('学号重复');
+        return;
+      }
+
       Message.loading({
         id: 'student_add',
         content: '正在添加' 
@@ -35,7 +43,7 @@ const FormItem = Form.Item;
       await dispatch({
         type: 'add',
         text: JSON.stringify(form.getFieldsValue())
-      })
+      })   
       await sendData(JSON.stringify(form.getFieldsValue()));
       setIsSending(false);
       setIsSent(true);

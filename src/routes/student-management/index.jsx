@@ -35,32 +35,35 @@ const initialTasks= [
   },
 ];
 
-function tasksReducer(tasks, action){
-  switch (action.type){
-    case 'add':{
-      return [ ...tasks, JSON.parse(action.text) ];
-    }
-    case 'change':{
-      return tasks.map(t =>{
-        if (t.id === action.task.id){
-          return action.task;
-        } else {
-          return t;
-        }
-      });
-    }
-    case 'delete': {
-       return tasks.filter(t => t.id!== action.id)
-    }
-    default: {
-      throw Error('Unknow action ' + action.type)
-    }
-  }
-}
+
 
 
 export default function  StudentMangementIndex(){
   const [ tasks, dispatch ] = useReducer(tasksReducer, initialTasks);
+  function tasksReducer(tasks, action){
+    switch (action.type){
+      case 'add':{
+        return [ ...tasks, JSON.parse(action.text) ];
+      }
+      
+      case 'change':{
+        return tasks.map(t =>{
+          if (t.id === action.task.id){
+            return action.task;
+          } else {
+            return t;
+          }
+        });
+      }
+      case 'delete': {
+         return tasks.filter(t => t.id!== action.id)
+      }
+      default: {
+        throw Error('Unknow action ' + action.type)
+      }
+    }
+  }
+
   return (
     <globalContext.Provider value={tasks}>
         <globalDispatchContext.Provider value={dispatch}>
