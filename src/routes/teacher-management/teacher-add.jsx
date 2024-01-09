@@ -54,7 +54,16 @@ const FormItem = Form.Item;
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
-      <FormItem field={'id'}  disabled={isSending} label='编号'  rules={[{ required: true }]}>
+      <FormItem field={'id'}  disabled={isSending} label='编号'       
+      rules={[
+         { required: true },   
+          { validator(value, cb) {
+              const regex =/^\d+$/;
+              if (!regex.test(value)) {
+                return cb('必须填写数字');
+              }
+            return cb();
+          }, }]}>
           <Input placeholder='输入教师编号' />
         </FormItem>
         <FormItem field={'TeacherName'}  disabled={isSending} label='姓名'  rules={[{ required: true }]}>
