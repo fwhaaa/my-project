@@ -16,6 +16,7 @@ import "@arco-design/web-react/dist/css/arco.css";
 import TeacherAdd from './routes/teacher-management/teacher-add';
 import TeachertList from './routes/teacher-management/teacher-list';
 import StudentMangementIndex from './routes/student-management';
+import TeacherMangementIndex from './routes/teacher-management';
 
 
 const router = createBrowserRouter([
@@ -45,18 +46,19 @@ const router = createBrowserRouter([
                
       },
       {
-        path: "teacher/management/add",
-        element: <TeacherAdd />
+        path: "teacher/management",
+        element: <TeacherMangementIndex />,
+        children:[ 
+          {
+            path: "add",
+            element: <TeacherAdd />,
+          },
+          {
+            path: "list",
+            element: <TeachertList />
+          },
+        ]
                
-      },
-      {
-        path: "teacher/management/list",
-        element: <TeachertList />
-               
-      },
-      {
-        path:"form/demo",
-        element:<FormDemo />,    
       },
       
     ]

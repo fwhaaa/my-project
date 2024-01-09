@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Table, Button, Input } from '@arco-design/web-react';
-import { globalContext } from '../../globalContext';
-import { globalDispatchContext } from '../../globalContext';
+import { globalContext, globalDispatchContext } from './globalContext';
 
 const InputSearch = Input.Search;
 function StudentList() {
@@ -20,6 +19,7 @@ function StudentList() {
     {
       title: '学号',
       dataIndex: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Address',

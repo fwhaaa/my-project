@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { globalDispatchContext } from '../../globalContext';
+import { globalDispatchContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
 const FormItem = Form.Item;
   const StudentAdd = () => {
