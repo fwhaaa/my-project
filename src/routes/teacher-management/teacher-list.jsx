@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Table, Button, Input } from '@arco-design/web-react';
+import { Table, Button, Input,  } from '@arco-design/web-react';
 import { globalDispatchContext, globalContext } from './globalContext';
 
 const InputSearch = Input.Search;
@@ -58,11 +58,13 @@ function TeachertList() {
     <div>
        <InputSearch onChange={handleSearch} allowClear placeholder='Enter keyword to search' style={{ width: 350 }} />
       
+      
       <Table
         rowKey='id'
         columns={columns}
         data={data}
       />
+
       
     </div>
   );

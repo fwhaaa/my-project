@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState, React } from 'react';
-import { Table, Button, Input, Modal } from '@arco-design/web-react';
+import { useContext, useEffect, useState } from 'react';
+import { Table, Button, Input, Modal, Select } from '@arco-design/web-react';
 import { globalContext, globalDispatchContext } from './globalContext';
 
 const InputSearch = Input.Search;
@@ -9,6 +9,7 @@ function StudentList() {
   const [data, setData] = useState(tasks);
   const [visible, setVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
+  const [searchType,setSearchType] = useState('StudentName');
   useEffect(()=>{
       setData(tasks)
   },[tasks])
@@ -58,14 +59,28 @@ function StudentList() {
   }
   
   async function handleSearch(search){
-    setData(tasks.filter(t => t.StudentName.includes(search)));
+    if(searchType === 'StudentName'){
+     setData(tasks.filter(t => t.StudentName.includes(search)));
+    }
+    if(searchType === 'id'){
+     setData(tasks.filter(t => t.id.includes(search)));
+    }
   }
   
   console.log('tasks',tasks)
   return (
     <div>
-       <InputSearch onChange={handleSearch} allowClear placeholder='Enter keyword to search' style={{ width: 350 }} />
-      
+       {/* <InputSearch onChange={handleSearch} allowClear placeholder='Enter keyword to search' style={{ width: 350 }} /> */}
+       <Input.Group compact>
+            <Select defaultValue='StudentName' onChange={(value)=>{
+              console.log('value',value)
+              setSearchType(value);
+            }} showSearch style={{ width: '25%' }}>
+              <Select.Option value='StudentName' >姓名</Select.Option>
+              <Select.Option value='id'>学号</Select.Option>
+            </Select>
+            <Input style={{ width: '75%' }} placeholder='Please enter an address' onChange={handleSearch} />
+          </Input.Group>
       <Table
         rowKey='id'
         columns={columns}
