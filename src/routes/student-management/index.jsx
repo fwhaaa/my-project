@@ -58,6 +58,16 @@ export default function  StudentMangementIndex(){
       case 'delete': {
          return tasks.filter(t => t.id!== action.id)
       }
+
+      case 'edit': {
+        return tasks.map(t => {
+          if (t.id === JSON.parse(action.text).id){
+            return JSON.parse(action.text);
+          }else{
+            return t;
+          }
+        })
+      }
       default: {
         throw Error('Unknow action ' + action.type)
       }

@@ -1,15 +1,27 @@
 import { useContext, useEffect, useState } from 'react';
-import { Table, Button, Input, Modal, Select } from '@arco-design/web-react';
+import { Table, Button, Input, Modal, Select, Form, Message  } from '@arco-design/web-react';
 import { globalContext, globalDispatchContext } from './globalContext';
 
-const InputSearch = Input.Search;
+const FormItem = Form.Item;
 function StudentList() {
   const dispatch = useContext(globalDispatchContext);
   const tasks = useContext(globalContext);
   const [data, setData] = useState(tasks);
   const [visible, setVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
   const [searchType,setSearchType] = useState('StudentName');
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const [form] = Form.useForm();
+  const formItemLayout = {
+    labelCol: {
+      span: 4,
+    },
+    wrapperCol: {
+      span: 20,
+    },
+  };
   useEffect(()=>{
       setData(tasks)
   },[tasks])
@@ -37,6 +49,15 @@ function StudentList() {
       title: '操作',
       dataIndex: 'op',
       render: (_, record) => ( 
+        <div>
+          <Button onClick={() =>{
+          setCurrentRecord(record)
+          form.setFieldsValue(record)
+          setEditVisible(true)
+        } 
+         } type='primary' status='default'  >
+          修改
+        </Button> 
         <Button onClick={() =>{
           setCurrentRecord(record)
           setVisible(true)
@@ -44,6 +65,7 @@ function StudentList() {
          } type='primary' status='danger'  >
           删除
         </Button>  
+        </div>
       ),
     },
   ];
@@ -58,19 +80,33 @@ function StudentList() {
     setVisible(false);
   }
   
+  async function EditList(){
+    form.validate().then(async () => {
+      setConfirmLoading(true);
+      await dispatch({
+        type: 'edit',
+        text: JSON.stringify(form.getFieldsValue())
+      })
+      setTimeout(() => {
+        Message.success('Success !');
+        setEditVisible(false);
+        setConfirmLoading(false);
+      }, 1500);
+    })
+ 
+    
+  }
+
   async function handleSearch(search){
     if(searchType === 'StudentName'){
-     setData(tasks.filter(t => t.StudentName.includes(search)));
+    setData(tasks.filter(t => t.StudentName.includes(search)));
     }
     if(searchType === 'id'){
-     setData(tasks.filter(t => t.id.includes(search)));
-    }
+      setData(tasks.filter(t => t.id.includes(search)));
   }
-  
-  console.log('tasks',tasks)
+}
   return (
     <div>
-       {/* <InputSearch onChange={handleSearch} allowClear placeholder='Enter keyword to search' style={{ width: 350 }} /> */}
        <Input.Group compact>
             <Select defaultValue='StudentName' onChange={(value)=>{
               console.log('value',value)
@@ -86,8 +122,41 @@ function StudentList() {
         columns={columns}
         data={data}
       />
+        <Modal
+        title='修改'
+        visible={editVisible}
+        onOk={() => {
+          EditList();
+        }}
+        confirmLoading={confirmLoading}
+        onCancel={() => setEditVisible(false)}
+      >
+        <Form
+          {...formItemLayout}
+          form={form}
+          labelCol={{
+            style: { flexBasis: 90 },
+          }}
+          wrapperCol={{
+            style: { flexBasis: 'calc(100% - 90px)' },
+          }}
+        >    
+          <FormItem label='学号' field='id' disabled rules={[{ required: true }]}>
+            <Input placeholder='' />
+          </FormItem>
+            <FormItem label='姓名' field='StudentName' rules={[{ required: true }]}>
+            <Input placeholder='' />
+          </FormItem>
+          <FormItem label='地址' required field='address' rules={[{ required: true }]}>
+          <Input placeholder='' />
+          </FormItem>
+          <FormItem label='邮箱' required field='email' rules={[{ required: true }]}>
+          <Input placeholder='' />
+          </FormItem>
+        </Form>
+      </Modal>
        <Modal
-          title='Modal Title'
+          title='删除'
           visible={visible}
           onOk={() =>
           {        
