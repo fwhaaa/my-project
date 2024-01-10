@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { Table, Button, Input } from '@arco-design/web-react';
+import { useContext, useEffect, useState, React } from 'react';
+import { Table, Button, Input, Modal } from '@arco-design/web-react';
 import { globalContext, globalDispatchContext } from './globalContext';
 
 const InputSearch = Input.Search;
@@ -7,35 +7,42 @@ function StudentList() {
   const dispatch = useContext(globalDispatchContext);
   const tasks = useContext(globalContext);
   const [data, setData] = useState(tasks);
+  const [visible, setVisible] = useState(false);
+  const [currentRecord,setCurrentRecord] =useState(undefined);
   useEffect(()=>{
       setData(tasks)
   },[tasks])
   
   const columns = [
-    {
-      title: '姓名',
-      dataIndex: 'StudentName',
-    },
+  
     {
       title: '学号',
       dataIndex: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Address',
+      title: '姓名',
+      dataIndex: 'StudentName',
+    },
+    {
+      title: '地址',
       dataIndex: 'address',
     },
     {
-      title: 'Email',
+      title: '邮箱',
       dataIndex: 'email',
     },
     {
-      title: 'Operation',
+      title: '操作',
       dataIndex: 'op',
-      render: (_, record) => (
-        <Button onClick={() =>DeleteList(record) } type='primary' status='danger'>
-          Delete
-        </Button>
+      render: (_, record) => ( 
+        <Button onClick={() =>{
+          setCurrentRecord(record)
+          setVisible(true)
+        } 
+         } type='primary' status='danger'  >
+          删除
+        </Button>  
       ),
     },
   ];
@@ -47,12 +54,14 @@ function StudentList() {
       id: item.id
      }
     )
+    setVisible(false);
   }
   
   async function handleSearch(search){
     setData(tasks.filter(t => t.StudentName.includes(search)));
   }
-
+  
+  console.log('tasks',tasks)
   return (
     <div>
        <InputSearch onChange={handleSearch} allowClear placeholder='Enter keyword to search' style={{ width: 350 }} />
@@ -62,7 +71,22 @@ function StudentList() {
         columns={columns}
         data={data}
       />
-      
+       <Modal
+          title='Modal Title'
+          visible={visible}
+          onOk={() =>
+          {        
+            DeleteList(currentRecord)
+          }
+            }
+          onCancel={() => setVisible(false)}
+          autoFocus={false}
+          focusLock={true}
+         >
+          <p>
+            确认删除学生?
+          </p>
+        </Modal>
     </div>
   );
 }
