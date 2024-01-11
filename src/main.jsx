@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import ErrorPage from './error-page';
 import Contact from './routes/contact';
-import FormDemo from './routes/form-demo';
 import StudentAdd from './routes/student-management/student-add';
 import StudentList from './routes/student-management/student-list';
 import {
@@ -17,6 +16,9 @@ import TeacherAdd from './routes/teacher-management/teacher-add';
 import TeachertList from './routes/teacher-management/teacher-list';
 import StudentMangementIndex from './routes/student-management';
 import TeacherMangementIndex from './routes/teacher-management';
+import QuestionAdd from './routes/questionbank-management/question-add';
+import QuesionBankMangementIndex from './routes/questionbank-management';
+import QuestionBankList from './routes/questionbank-management/questionbank-list';
 
 
 const router = createBrowserRouter([
@@ -58,7 +60,20 @@ const router = createBrowserRouter([
             element: <TeachertList />
           },
         ]
-               
+      },
+      {
+        path: "questionbank/management",
+        element: <QuesionBankMangementIndex/>,
+        children:[ 
+          {
+            path: "add",
+            element: <QuestionAdd />,
+          },
+          {
+            path: "list",
+            element: <QuestionBankList />
+          },
+        ]
       },
       
     ]

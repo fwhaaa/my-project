@@ -90,20 +90,20 @@ function Menus() {
                  <MenuItem key='2_1'>考试列表</MenuItem>
                 </Link>
 
-        </SubMenu>
+        </SubMenu> 
         <SubMenu
-          key='3'
+          key='questionbank_management'
           title={
             <>
               <IconBook />题库管理
             </>
           }
         >
-                <Link to={`contacts/1`}>
-                 <MenuItem key='3_0'>题库列表</MenuItem>
+                <Link to={`questionbank/management/add`}>
+                 <MenuItem key='questionbank_management_add'>添加题目</MenuItem>
                 </Link>
-                <Link to={`contacts/2`}>
-                 <MenuItem key='3_1'>新增题目</MenuItem>
+                <Link to={`questionbank/management/list`}>
+                 <MenuItem key='questionbank_management_list'>题目列表</MenuItem>
                 </Link>
 
         </SubMenu>
