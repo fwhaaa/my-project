@@ -1,12 +1,12 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message, Radio, Select, Tabs, Typography, Space } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { globalDispatchContext, globalContext } from './globalContext';
+// import { globalDispatchContext, globalContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
 const FormItem = Form.Item;
   const QuestonAdd = () => {
-  const dispatch = useContext(globalDispatchContext);
-  const tasks =useContext(globalContext)
+  // const dispatch = useContext(globalDispatchContext);
+  // const tasks =useContext(globalContext)
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
@@ -14,59 +14,59 @@ const FormItem = Form.Item;
   const RadioGroup = Radio.Group;
   const TextArea = Input.TextArea;
 
-    function sendData(data) {
-        return new Promise(resolve =>{
-          setTimeout(resolve,2000);
-        });
-      }
-      const [email, setEmail] = useState([]);
-      const handleSearch = (inputValue) => {
-        const mail=[
-          '@qq.com',
-          '@163.com',
-          '@gmail.com',
-          '@xxx.com'
-        ];
-        setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
-      }
-  async function handSubmit() {
-    try {
-      await form.validate();
-      const isExist = tasks.some((v)=>v.id === form.getFieldValue('id') );
-      if(isExist){
-        Message.error('学号重复');
-        return;
-      }
+  //   function sendData(data) {
+  //       return new Promise(resolve =>{
+  //         setTimeout(resolve,2000);
+  //       });
+  //     }
+  //     const [email, setEmail] = useState([]);
+  //     const handleSearch = (inputValue) => {
+  //       const mail=[
+  //         '@qq.com',
+  //         '@163.com',
+  //         '@gmail.com',
+  //         '@xxx.com'
+  //       ];
+  //       setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
+  //     }
+  // async function handSubmit() {
+  //   try {
+  //     await form.validate();
+  //     const isExist = tasks.some((v)=>v.id === form.getFieldValue('id') );
+  //     if(isExist){
+  //       Message.error('学号重复');
+  //       return;
+  //     }
 
-      Message.loading({
-        id: 'question_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await dispatch({
-        type: 'add',
-        text: JSON.stringify(form.getFieldsValue())
-      })   
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
-    }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'question_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
+  //     Message.loading({
+  //       id: 'question_add',
+  //       content: '正在添加' 
+  //       });
+  //     setIsSending(true);
+  //     await dispatch({
+  //       type: 'add',
+  //       text: JSON.stringify(form.getFieldsValue())
+  //     })   
+  //     await sendData(JSON.stringify(form.getFieldsValue()));
+  //     setIsSending(false);
+  //     setIsSent(true);
+  //   } catch (e) {
+  //     Message.error('校验失败');
+  //     console.log(e);
+  //   }
+  // }
+  // if (isSent) {
+  //   Message.success({
+  //     id: 'question_add',
+  //     content: '添加成功!',
+  //   })
+  //   setIsSent(false);
+  // }
   return (
     <div>
        <Tabs defaultActiveTab='1'>
       <TabPane key='1' title='单选题'>
-      <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
+      {/* <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
       <FormItem field={'id'}  disabled={isSending} label='学号'  
       rules={[{ required: true },   
         { validator(value, cb) {
@@ -95,13 +95,13 @@ const FormItem = Form.Item;
             data={email}
             />
         </FormItem>
-      </Form>
+      </Form> */}
   
-        <FormItem wrapperCol={{ offset: 5 }}>
+        {/* <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
           <Button disabled={isSending} loading={isSending} type='primary'  onClick={handSubmit}   icon={<IconPlus /> } >提交</Button>
-        </FormItem> 
+        </FormItem>  */}
 
       </TabPane>
       <TabPane key='2' title='多选题' >

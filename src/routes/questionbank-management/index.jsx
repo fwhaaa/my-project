@@ -1,10 +1,17 @@
 import { useReducer } from 'react';
 import { Outlet } from 'react-router-dom';
-import { globalContext, globalDispatchContext } from './globalContext';
+import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext } from './globalContext';
 
 const multipleChoice= [
   {
-    stem: '1+1=',
+    stem: '3+3=',
+    selectA: '1',
+    selectB: '2',
+    selectC: '3',
+    selectD: '4',
+  },
+  {
+    stem: '3+3+4=',
     selectA: '1',
     selectB: '2',
     selectC: '3',
@@ -12,32 +19,36 @@ const multipleChoice= [
   }
 ];
 
+const singleChoice= [
+  {
+    stem: '2+2=',
+    selectA: '1',
+    selectB: '2',
+    selectC: '3',
+    selectD: '4',
+  },
+  {
+    stem: '2+2+4=',
+    selectA: '12',
+    selectB: '21',
+    selectC: '32',
+    selectD: '41',
+  }
+];
+
 
 
 
 export default function  QuesionBankMangementIndex(){
-  const [ tasks, dispatch ] = useReducer(tasksReducer,multipleChoice);
-  function tasksReducer(tasks, action){
+  const [ multipleChoicetask, multipledispatch ] = useReducer(multipleChoiceTaskReducer,multipleChoice);
+  function multipleChoiceTaskReducer(multipleChoicetask, action){
     switch (action.type){
-      case 'add':{
-        return [ ...tasks, JSON.parse(action.text) ];
-      }
-      
-      case 'change':{
-        return tasks.map(t =>{
-          if (t.id === action.task.id){
-            return action.task;
-          } else {
-            return t;
-          }
-        });
-      }
       case 'delete': {
-         return tasks.filter(t => t.id!== action.stem)
+         return multipleChoicetask.filter(t => t.stem !== action.id)
       }
 
-      case 'edit': {
-        return tasks.map(t => {
+      case 'edit': { 
+        return multipleChoicetask.map(t => {
           if (t.stem === JSON.parse(action.text).stem){
             return JSON.parse(action.text);
           }else{
@@ -51,12 +62,45 @@ export default function  QuesionBankMangementIndex(){
     }
   }
 
+  const [ singleChoicetask, singledispatch ] = useReducer(singleChoiceTaskReducer,singleChoice);
+  function singleChoiceTaskReducer(singleChoicetask, action){
+    switch (action.type){
+      case 'add':{
+        return [ ...singleChoicetask, JSON.parse(action.text) ];
+      }
+      
+      case 'delete': {
+         return singleChoicetask.filter(t => t.stem !== action.id)
+      }
+
+      case 'edit': {
+        return singleChoicetask.map(t => {
+          if (t.stem  === JSON.parse(action.text).stem){
+            return JSON.parse(action.text);
+          }else{
+            return t;
+          }
+        })
+      }
+      default: {
+        throw Error('Unknow action ' + action.type)
+      }
+    }
+  }
+
+  
+  
+
   return (
-    <globalContext.Provider value={tasks}>
-        <globalDispatchContext.Provider value={dispatch}>
+    <multipleContext.Provider value={multipleChoicetask}>
+      <singleContext.Provider value={singleChoicetask}>
+        <multipleDispatchContext.Provider value={multipledispatch}>
+         <singleDispatchContext.Provider value={singledispatch}>
           <Outlet></Outlet>
-        </globalDispatchContext.Provider>
-    </globalContext.Provider>
+         </singleDispatchContext.Provider>
+        </multipleDispatchContext.Provider>
+      </singleContext.Provider>
+    </multipleContext.Provider>
   )
 }
 
