@@ -43,6 +43,9 @@ export default function  QuesionBankMangementIndex(){
   const [ multipleChoicetask, multipledispatch ] = useReducer(multipleChoiceTaskReducer,multipleChoice);
   function multipleChoiceTaskReducer(multipleChoicetask, action){
     switch (action.type){
+      case 'add':{
+        return [ ...multipleChoicetask, JSON.parse(action.text) ];
+      }
       case 'delete': {
          return multipleChoicetask.filter(t => t.stem !== action.id)
       }

@@ -1,67 +1,58 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message, Radio, Select, Tabs, Typography, Space } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-// import { globalDispatchContext, globalContext } from './globalContext';
+import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
 const FormItem = Form.Item;
   const QuestonAdd = () => {
-  // const dispatch = useContext(globalDispatchContext);
-  // const tasks =useContext(globalContext)
+  const multipledispatch = useContext(multipleDispatchContext);
+  const tasks =useContext(multipleContext)
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
   const TabPane = Tabs.TabPane;
+  const multipleChoicetask = useContext(multipleContext );
   const RadioGroup = Radio.Group;
   const TextArea = Input.TextArea;
 
-  //   function sendData(data) {
-  //       return new Promise(resolve =>{
-  //         setTimeout(resolve,2000);
-  //       });
-  //     }
-  //     const [email, setEmail] = useState([]);
-  //     const handleSearch = (inputValue) => {
-  //       const mail=[
-  //         '@qq.com',
-  //         '@163.com',
-  //         '@gmail.com',
-  //         '@xxx.com'
-  //       ];
-  //       setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
-  //     }
-  // async function handSubmit() {
-  //   try {
-  //     await form.validate();
-  //     const isExist = tasks.some((v)=>v.id === form.getFieldValue('id') );
-  //     if(isExist){
-  //       Message.error('学号重复');
-  //       return;
-  //     }
+    function sendData(data) {
+        return new Promise(resolve =>{
+          setTimeout(resolve,2000);
+        });
+      }
 
-  //     Message.loading({
-  //       id: 'question_add',
-  //       content: '正在添加' 
-  //       });
-  //     setIsSending(true);
-  //     await dispatch({
-  //       type: 'add',
-  //       text: JSON.stringify(form.getFieldsValue())
-  //     })   
-  //     await sendData(JSON.stringify(form.getFieldsValue()));
-  //     setIsSending(false);
-  //     setIsSent(true);
-  //   } catch (e) {
-  //     Message.error('校验失败');
-  //     console.log(e);
-  //   }
-  // }
-  // if (isSent) {
-  //   Message.success({
-  //     id: 'question_add',
-  //     content: '添加成功!',
-  //   })
-  //   setIsSent(false);
-  // }
+  async function multiplehandSubmit() {
+    try {
+      await form.validate();
+      const isExist = multipleChoicetask.some((v)=>v.stem === form.getFieldValue('stem') );
+      if(isExist){
+        Message.error('题目重复');
+        return;
+      }
+      Message.loading({
+        id: 'question_add',
+        content: '正在添加' 
+        });
+      setIsSending(true);
+      await multipledispatch({
+        type: 'add',
+        text: JSON.stringify(form.getFieldsValue())
+      })   
+      await sendData(JSON.stringify(form.getFieldsValue()));
+      setIsSending(false);
+      setIsSent(true);
+    } catch (e) {
+      Message.error('校验失败');
+      console.log(e);
+    }
+  }
+  if (isSent) {
+    Message.success({
+      id: 'question_add',
+      content: '添加成功!',
+    })
+    setIsSent(false);
+  }
   return (
     <div>
        <Tabs defaultActiveTab='1'>
@@ -107,9 +98,7 @@ const FormItem = Form.Item;
       <TabPane key='2' title='多选题' >
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
       <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
-      <Space wrap>
-      <TextArea placeholder='Please enter ...'  autoSize   />
-      </Space>
+      <Input />  
       </FormItem>
       <FormItem field={'selectA'}  disabled={isSending} label='选项A' rules={[{ required: true }]} >
           <Input />  
@@ -123,10 +112,15 @@ const FormItem = Form.Item;
         <FormItem field={'selectD'}  disabled={isSending} label='选项D' rules={[{ required: true }]} >
           <Input />
         </FormItem>
+        <FormItem wrapperCol={{ offset: 5 }}>
+        </FormItem>
+        <FormItem wrapperCol={{ offset: 5 }}>
+          <Button disabled={isSending} loading={isSending} type='primary'  onClick={multiplehandSubmit}   icon={<IconPlus /> } >提交</Button>
+        </FormItem> 
       </Form>
       </TabPane>
       <TabPane key='3' title='判断题'>
-      <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
+      {/* <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
       <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
       <Space wrap>
       <TextArea placeholder='Please enter ...'  autoSize   />
@@ -138,7 +132,7 @@ const FormItem = Form.Item;
         <Radio value='false'>错误</Radio>
       </RadioGroup>
       </FormItem>
-      </Form>
+      </Form> */}
       </TabPane>
       <TabPane key='4' title='简答题'>
         <Typography.Paragraph >Content of Tab Panel 4</Typography.Paragraph>
