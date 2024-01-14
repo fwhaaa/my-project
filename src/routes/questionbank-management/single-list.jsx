@@ -3,7 +3,7 @@ import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-rea
 import { singleContext,singleDispatchContext } from './globalContext';
 
 const FormItem = Form.Item;
-function SingleAdd() {
+function SingleList() {
   const singledispatch =useContext(singleDispatchContext)
   const singleChoicetask = useContext( singleContext);
   const [visible, setVisible] = useState(false);
@@ -168,4 +168,4 @@ function SingleAdd() {
   );
 }
 
-export default SingleAdd;
+export default SingleList;

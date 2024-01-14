@@ -3,7 +3,7 @@ import { Table, Button, Input, Modal, Form, Message, Tabs} from '@arco-design/we
 import { multipleDispatchContext, multipleContext } from './globalContext';
 
 const FormItem = Form.Item;
-function MultiipleAdd() {
+function MultiipleList() {
   const multipledispatch = useContext(multipleDispatchContext);
   const multipleChoicetask = useContext(multipleContext );
   const [multipledata, setMultipleData] = useState(multipleChoicetask);
@@ -101,8 +101,6 @@ function MultiipleAdd() {
 
   return (
     <div>
-      <Tabs>
-      <TabPane key='multipleChoice' title='多选题' >
       <Table
         rowKey='id'
         columns={multipleChoiceColumns}
@@ -160,11 +158,8 @@ function MultiipleAdd() {
             确认删除题目?
           </p>
         </Modal>
-      </TabPane>
-    </Tabs>
-  
     </div>
   );
 }
 
-export default MultiipleAdd;
+export default MultiipleList;

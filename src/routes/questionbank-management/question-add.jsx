@@ -3,6 +3,8 @@ import { Form, Input, Button, Message, Radio, Select, Tabs, Typography, Space } 
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
+import MultipleAdd from './questionadd/multiple-add';
+import SingleAdd from './questionadd/single-add';
 const FormItem = Form.Item;
   const QuestonAdd = () => {
   const multipledispatch = useContext(multipleDispatchContext);
@@ -12,112 +14,18 @@ const FormItem = Form.Item;
   const [ form ] =Form.useForm();
   const TabPane = Tabs.TabPane;
   const multipleChoicetask = useContext(multipleContext );
-  const RadioGroup = Radio.Group;
-  const TextArea = Input.TextArea;
 
-    function sendData(data) {
-        return new Promise(resolve =>{
-          setTimeout(resolve,2000);
-        });
-      }
 
-  async function multiplehandSubmit() {
-    try {
-      await form.validate();
-      const isExist = multipleChoicetask.some((v)=>v.stem === form.getFieldValue('stem') );
-      if(isExist){
-        Message.error('题目重复');
-        return;
-      }
-      Message.loading({
-        id: 'question_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await multipledispatch({
-        type: 'add',
-        text: JSON.stringify(form.getFieldsValue())
-      })   
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
-    }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'question_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
+
+
   return (
     <div>
        <Tabs defaultActiveTab='1'>
       <TabPane key='1' title='单选题'>
-      {/* <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
-      <FormItem field={'id'}  disabled={isSending} label='学号'  
-      rules={[{ required: true },   
-        { validator(value, cb) {
-           const regex =/^\d+$/;
-           if (!regex.test(value)) {
-            return cb('必须填写数字');
-            }
-            return cb();
-          }, }]}>
-          <Input placeholder='输入学生学号' />
-        </FormItem>
-        <FormItem field={'StudentName'}  disabled={isSending} label='姓名'  
-          rules={[
-            { required: true },
-         
-            ]}>
-          <Input placeholder='输入学生姓名' />
-        </FormItem>
-        <FormItem field={'address'}  disabled={isSending} label='地址' rules={[{ required: true }]} >
-          <Input placeholder='输入地址' />
-        </FormItem>
-        <FormItem field={'email'}  disabled={isSending} label='邮箱' rules={[{ required: true }]} >
-        <AutoComplete
-            placeholder='输入邮箱'
-            onSearch={handleSearch}
-            data={email}
-            />
-        </FormItem>
-      </Form> */}
-  
-        {/* <FormItem wrapperCol={{ offset: 5 }}>
-        </FormItem>
-        <FormItem wrapperCol={{ offset: 5 }}>
-          <Button disabled={isSending} loading={isSending} type='primary'  onClick={handSubmit}   icon={<IconPlus /> } >提交</Button>
-        </FormItem>  */}
-
+        <SingleAdd></SingleAdd>
       </TabPane>
-      <TabPane key='2' title='多选题' >
-      <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
-      <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
-      <Input />  
-      </FormItem>
-      <FormItem field={'selectA'}  disabled={isSending} label='选项A' rules={[{ required: true }]} >
-          <Input />  
-        </FormItem>
-        <FormItem field={'selectB'}  disabled={isSending} label='选项B' rules={[{ required: true }]} >
-          <Input />
-        </FormItem>
-        <FormItem field={'selectC'}  disabled={isSending} label='选项C' rules={[{ required: true }]} >
-          <Input />
-        </FormItem>
-        <FormItem field={'selectD'}  disabled={isSending} label='选项D' rules={[{ required: true }]} >
-          <Input />
-        </FormItem>
-        <FormItem wrapperCol={{ offset: 5 }}>
-        </FormItem>
-        <FormItem wrapperCol={{ offset: 5 }}>
-          <Button disabled={isSending} loading={isSending} type='primary'  onClick={multiplehandSubmit}   icon={<IconPlus /> } >提交</Button>
-        </FormItem> 
-      </Form>
+      <TabPane key='multiple' title='多选题' >
+        <MultipleAdd></MultipleAdd>
       </TabPane>
       <TabPane key='3' title='判断题'>
       {/* <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
