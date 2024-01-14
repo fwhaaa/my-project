@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { multipleContext, multipleDispatchContext } from '../globalContext'
+
 const FormItem = Form.Item;
   const  MultipleAdd = () => {
   const multipledispatch = useContext(multipleDispatchContext);
@@ -16,6 +17,8 @@ const FormItem = Form.Item;
           setTimeout(resolve,2000);
         });
       }
+
+ 
 
   async function multiplehandSubmit() {
     try {

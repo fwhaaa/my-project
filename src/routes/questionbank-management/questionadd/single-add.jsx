@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { singleContext, singleDispatchContext } from '../globalContext'
+import httpServer from './httpServer';
 const FormItem = Form.Item;
   const  SingleAdd = () => {
   const multipledispatch = useContext(singleDispatchContext);
@@ -16,6 +17,24 @@ const FormItem = Form.Item;
           setTimeout(resolve,2000);
         });
       }
+    async function saveData(data){
+      httpServer({
+        url: 'http://localhost:3000/api/teacher/addQuesion/singleChoice',
+      }, JSON.parse(data))
+      .then((res) => {
+        console.log('res',res);
+        let respData = res.data;
+        // let respData = {
+        //   "respCode": "1",
+        //   "paperId": 38,
+        //   "instId" : 26,
+
+      })
+      .catch((err) => {
+        console.log('err',err);
+      })
+    
+        }
 
   async function singlehandSubmit() {
     try {
@@ -33,7 +52,8 @@ const FormItem = Form.Item;
       await multipledispatch({
         type: 'add',
         text: JSON.stringify(form.getFieldsValue())
-      })   
+      })
+      await saveData(JSON.stringify(form.getFieldsValue()));   
       await sendData(JSON.stringify(form.getFieldsValue()));
       setIsSending(false);
       setIsSent(true);
