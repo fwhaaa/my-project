@@ -19,7 +19,7 @@ const FormItem = Form.Item;
       }
     async function saveData(data){
       httpServer({
-        url: 'http://localhost:3000/api/teacher/addQuesion/singleChoice',
+        url: '/teacher/addQuesion/singleChoice',
       }, JSON.parse(data))
       .then((res) => {
         console.log('res',res);

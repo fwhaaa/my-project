@@ -70,6 +70,7 @@ const httpServer = (opts, data) => {
   let httpDefaultOpts = {
     
     //http默认配置
+    baseURL:'http://localhost:3000/api',
     method: opts.method,
     url: opts.url,
     timeout: 10000,
@@ -94,12 +95,10 @@ const httpServer = (opts, data) => {
         'X-Requested-With': 'XMLHttpRequest',
         "Accept": "application/json",
         "Content-Type": "application/json; charset=UTF-8",
-        "Access-Control-Allow-Origin":"*"
       }
       : {
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        "Access-Control-Allow-Origin":"*"
       }
   }
 console.log('httpDefaultOpts',httpDefaultOpts);
