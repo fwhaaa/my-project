@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-react';
 import { singleContext,singleDispatchContext } from '../globalContext';
+import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
 function SingleList() {
   const singledispatch =useContext(singleDispatchContext)
-  const singleChoicetask = useContext( singleContext);
+  const singleChoicetask = useContext(singleContext);
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
-  const [singledata, setSingleData] = useState(singleChoicetask);
+  const [singledata, setSingleData] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const formItemLayout = {
@@ -21,9 +22,44 @@ function SingleList() {
     },
   };
 
+  async function getQuestionList() {
+    httpServer({
+      url: '/teacher/questionList/singleChoice',
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log('----res',res);
+      let respData = res.data;
+      if(res.status ===200 && respData.respCode ===1 ) {
+        setSingleData(res.data.results);
+      }
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+  async function deleteSingleList(data){
+    httpServer({
+      url: '/teacher/deleteQuestion/singleChoice',
+    }, data )
+    .then(async (res) => {
+      let respData = res.data;
+      await getQuestionList();
+
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+  // useEffect(()=>{
+  //   setSingleData(singleChoicetask)
+  // },[singleChoicetask])
+
   useEffect(()=>{
-    setSingleData(singleChoicetask)
-  },[singleChoicetask])
+    getQuestionList();
+  },[])
   
 
   const singleChoiceColumns = [
@@ -75,14 +111,15 @@ function SingleList() {
   ];
   
   
-  async function DeleteSingleList(item){
-    await singledispatch (
-     {
-      type: 'delete',
-      id: item.stem
-     }
-    )
-    console.log('singletask',singleChoicetask);
+  async function deleteSingleQuestion(item){
+
+    await deleteSingleList(item);
+    // await singledispatch (
+    //  {
+    //   type: 'delete',
+    //   id: item.id
+    //  }
+    // )
   
     setVisible(false);
   }
@@ -90,7 +127,6 @@ function SingleList() {
   async function EditSingleList(){
     form.validate().then(async () => {
       setConfirmLoading(true);
-      console.log('singledispatch',singledispatch);
       await singledispatch ({
         type: 'edit',
         text: JSON.stringify(form.getFieldsValue())
@@ -108,13 +144,12 @@ function SingleList() {
       <Table
         rowKey='id'
         columns={singleChoiceColumns}
-        data={singleChoicetask}
+        data={singledata}
       />
         <Modal
         title='单选修改'
         visible={editVisible}
         onOk={() => {
-          console.log('single',singledispatch);
           EditSingleList();
         }}
         confirmLoading={confirmLoading}
@@ -152,8 +187,7 @@ function SingleList() {
           visible={visible}
           onOk={() =>
           {        
-            console.log('single',singledispatch);
-            DeleteSingleList(currentRecord)
+            deleteSingleQuestion(currentRecord)
           }
             }
           onCancel={() => setVisible(false)}

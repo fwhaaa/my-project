@@ -50,7 +50,7 @@ const judge = [
 
 
 
-export default function  QuesionBankMangementIndex(){
+export default function  QuestionBankMangementIndex(){
   const [ multipleChoicetask, multipledispatch ] = useReducer(multipleChoiceTaskReducer,multipleChoice);
   function multipleChoiceTaskReducer(multipleChoicetask, action){
     switch (action.type){

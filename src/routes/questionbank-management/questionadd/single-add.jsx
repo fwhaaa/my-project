@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { singleContext, singleDispatchContext } from '../globalContext'
-import httpServer from './httpServer';
+import httpServer from '../../httpServer';
 const FormItem = Form.Item;
   const  SingleAdd = () => {
   const multipledispatch = useContext(singleDispatchContext);
@@ -19,7 +19,7 @@ const FormItem = Form.Item;
       }
     async function saveData(data){
       httpServer({
-        url: '/teacher/addQuesion/singleChoice',
+        url: '/teacher/addQuestion/singleChoice',
       }, JSON.parse(data))
       .then((res) => {
         let respData = res.data;
@@ -28,8 +28,7 @@ const FormItem = Form.Item;
       .catch((err) => {
         console.log('err',err);
       })
-    
-        }
+    }
 
   async function singlehandSubmit() {
     try {
