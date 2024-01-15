@@ -1,6 +1,7 @@
 import {  Tabs, Typography } from '@arco-design/web-react';
-import MultiipleList from './multiple-list';
-import SingleList from './single-list';
+import MultiipleList from '../questionbank-management/questionlist/multiple-list'
+import SingleList from '../questionbank-management/questionlist/single-list'
+import JudgeList from './questionlist/judge-list';
 
 function QuestionBankList() {
   const TabPane = Tabs.TabPane;
@@ -13,8 +14,8 @@ function QuestionBankList() {
       <TabPane key='multipleChoice' title='多选题' >
       <MultiipleList></MultiipleList>
       </TabPane>
-      <TabPane key='3' title='判断题'>
-        <Typography.Paragraph >Content of Tab Panel 3</Typography.Paragraph>
+      <TabPane key='judge' title='判断题'>
+        <JudgeList></JudgeList>
       </TabPane>
     </Tabs>
   

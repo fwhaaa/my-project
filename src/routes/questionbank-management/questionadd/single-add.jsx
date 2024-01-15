@@ -22,12 +22,7 @@ const FormItem = Form.Item;
         url: '/teacher/addQuesion/singleChoice',
       }, JSON.parse(data))
       .then((res) => {
-        console.log('res',res);
         let respData = res.data;
-        // let respData = {
-        //   "respCode": "1",
-        //   "paperId": 38,
-        //   "instId" : 26,
 
       })
       .catch((err) => {
@@ -38,12 +33,6 @@ const FormItem = Form.Item;
 
   async function singlehandSubmit() {
     try {
-      await form.validate();
-      const isExist = singleChoicetask.some((v)=>v.stem === form.getFieldValue('stem') );
-      if(isExist){
-        Message.error('题目重复');
-        return;
-      }
       Message.loading({
         id: 'question_add',
         content: '正在添加' 

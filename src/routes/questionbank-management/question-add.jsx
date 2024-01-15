@@ -28,19 +28,6 @@ const FormItem = Form.Item;
         <MultipleAdd></MultipleAdd>
       </TabPane>
       <TabPane key='3' title='判断题'>
-      {/* <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
-      <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
-      <Space wrap>
-      <TextArea placeholder='Please enter ...'  autoSize   />
-      </Space>
-      </FormItem>
-      <FormItem field={' correct answer'}  disabled={isSending}  rules={[{ required: true }]} >
-      <RadioGroup defaultValue='true' >
-        <Radio value='true'>正确</Radio>
-        <Radio value='false'>错误</Radio>
-      </RadioGroup>
-      </FormItem>
-      </Form> */}
       </TabPane>
       <TabPane key='4' title='简答题'>
         <Typography.Paragraph >Content of Tab Panel 4</Typography.Paragraph>

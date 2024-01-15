@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 import { Outlet } from 'react-router-dom';
-import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext } from './globalContext';
+import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext,judgeContext,judgeDispatchContext } from './globalContext';
 
 const multipleChoice= [
   {
@@ -33,6 +33,17 @@ const singleChoice= [
     selectB: '21',
     selectC: '32',
     selectD: '41',
+  }
+];
+
+const judge = [
+  {
+    stem: '2+2=4',
+
+  },
+  {
+    stem: '2+2+4=9',
+
   }
 ];
 
@@ -91,17 +102,47 @@ export default function  QuesionBankMangementIndex(){
     }
   }
 
+  const [ judgetask, judgedispatch ] = useReducer(judgeTaskReducer,judge);
+  function judgeTaskReducer(judgetask, action){
+    switch (action.type){
+      case 'add':{
+        return [ ...judgetask, JSON.parse(action.text) ];
+      }
+      
+      case 'delete': {
+         return judgetask.filter(t => t.stem !== action.id)
+      }
+
+      case 'edit': {
+        return judgetask.map(t => {
+          if (t.stem  === JSON.parse(action.text).stem){
+            return JSON.parse(action.text);
+          }else{
+            return t;
+          }
+        })
+      }
+      default: {
+        throw Error('Unknow action ' + action.type)
+      }
+    }
+  }
+
   
   
 
   return (
     <multipleContext.Provider value={multipleChoicetask}>
       <singleContext.Provider value={singleChoicetask}>
+      <judgeContext.Provider value={judgetask}>
         <multipleDispatchContext.Provider value={multipledispatch}>
          <singleDispatchContext.Provider value={singledispatch}>
+          <judgeDispatchContext.Provider value={judgedispatch}>
           <Outlet></Outlet>
+          </judgeDispatchContext.Provider>
          </singleDispatchContext.Provider>
         </multipleDispatchContext.Provider>
+        </judgeContext.Provider>
       </singleContext.Provider>
     </multipleContext.Provider>
   )

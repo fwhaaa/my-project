@@ -1,17 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
-import { Table, Button, Input, Modal, Form, Message, Tabs} from '@arco-design/web-react';
-import { multipleDispatchContext, multipleContext } from './globalContext';
+import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-react';
+import { judgeContext, judgeDispatchContext } from '../globalContext';
 
 const FormItem = Form.Item;
-function MultiipleList() {
-  const multipledispatch = useContext(multipleDispatchContext);
-  const multipleChoicetask = useContext(multipleContext );
-  const [multipledata, setMultipleData] = useState(multipleChoicetask);
+function  JudgeList() {
+  const judgedispatch =useContext(judgeDispatchContext)
+  const judgetask = useContext(judgeContext);
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
+  const [judgedata, setJudgeData] = useState(judgetask);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const TabPane = Tabs.TabPane;
   const [form] = Form.useForm();
   const formItemLayout = {
     labelCol: {
@@ -21,33 +20,19 @@ function MultiipleList() {
       span: 20,
     },
   };
-  useEffect(()=>{
-    setMultipleData(multipleChoicetask)
-  },[multipleChoicetask])
 
-  const multipleChoiceColumns = [
+  useEffect(()=>{
+    setJudgeData(judgetask)
+  },[judgetask])
+  
+
+  const judgeColumns = [
   
     {
       title: '题干',
       dataIndex: 'stem',
     },
-    {
-      title: '选项A',
-      dataIndex: 'selectA',
-    },
-    {
-      title: '选项B',
-      dataIndex: 'selectB',
-    },
-    {
-      title: '选项C',
-      dataIndex: 'selectC',
-    },
-    {
-      title: '选项D',
-      dataIndex: 'selectD',
-    },
-
+   
     {
       title: '操作',
       dataIndex: 'op',
@@ -73,20 +58,22 @@ function MultiipleList() {
     },
   ];
   
-
-  async function DeleteMultipleList(item){
-    await multipledispatch (
+  
+  async function DeleteJudgeList(item){
+    await judgedispatch (
      {
       type: 'delete',
       id: item.stem
      }
     )
+  
     setVisible(false);
   }
-  async function EditMultipleList(){
+
+  async function EditJudgeList(){
     form.validate().then(async () => {
       setConfirmLoading(true);
-      await multipledispatch ({
+      await judgedispatch({
         type: 'edit',
         text: JSON.stringify(form.getFieldsValue())
       })
@@ -97,20 +84,19 @@ function MultiipleList() {
       }, 1500);
     })
   }
-  
 
   return (
     <div>
       <Table
         rowKey='id'
-        columns={multipleChoiceColumns}
-        data={multipleChoicetask}
+        columns={judgeColumns}
+        data={judgetask}
       />
         <Modal
-        title='多选修改'
+        title='判断修改'
         visible={editVisible}
         onOk={() => {
-          EditMultipleList()
+            EditJudgeList();
         }}
         confirmLoading={confirmLoading}
         onCancel={() => setEditVisible(false)}
@@ -125,29 +111,18 @@ function MultiipleList() {
             style: { flexBasis: 'calc(100% - 90px)' },
           }}
         >    
-          <FormItem label='题干' field='stem' disabled  rules={[{ required: true }]}>
+          <FormItem label='题干' field='stem'  disabled rules={[{ required: true }]}>
             <Input placeholder='' />
-          </FormItem>
-            <FormItem label='选项A' field='selectA' rules={[{ required: true }]}>
-            <Input placeholder='' />
-          </FormItem>
-          <FormItem label='选项B' field='selectB' rules={[{ required: true }]}>
-          <Input placeholder='' />
-          </FormItem>
-          <FormItem label='选项C' field='selectC' rules={[{ required: true }]}>
-          <Input placeholder='' />
-          </FormItem>
-          <FormItem label='选项D' field='selectD' rules={[{ required: true }]}>
-          <Input placeholder='' />
           </FormItem>
         </Form>
       </Modal>
        <Modal
-          title='多选删除'
+          title='判断删除'
           visible={visible}
           onOk={() =>
           {        
-            DeleteMultipleList(currentRecord)
+        
+            DeleteJudgeList(currentRecord)
           }
             }
           onCancel={() => setVisible(false)}
@@ -162,4 +137,4 @@ function MultiipleList() {
   );
 }
 
-export default MultiipleList;
+export default JudgeList;

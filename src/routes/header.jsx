@@ -1,7 +1,4 @@
 import { PageHeader } from '@arco-design/web-react';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-
 const headerStyle={
 
    padding: '1px', 

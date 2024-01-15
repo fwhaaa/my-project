@@ -18,7 +18,7 @@ import StudentMangementIndex from './routes/student-management';
 import TeacherMangementIndex from './routes/teacher-management';
 import QuestionAdd from './routes/questionbank-management/question-add';
 import QuesionBankMangementIndex from './routes/questionbank-management';
-import QuestionBankList from './routes/questionbank-management/questionbank-list';
+import QuestionBankList from './routes/questionbank-management/questionbank-list'
 
 
 const router = createBrowserRouter([
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
           },
           {
             path: "list",
-            element: <QuestionBankList />
+            element: <QuestionBankList/>
           },
         ]
       },

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-react';
-import { singleContext,singleDispatchContext } from './globalContext';
+import { singleContext,singleDispatchContext } from '../globalContext';
 
 const FormItem = Form.Item;
 function SingleList() {
