@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 import { Outlet } from 'react-router-dom';
-import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext,judgeContext,judgeDispatchContext } from './globalContext';
+import { multipleContext, multipleDispatchContext, singleContext, singleDispatchContext,judgeContext,judgeDispatchContext,saqContext,saqDispatchContext } from './globalContext';
 
 const multipleChoice= [
   {
@@ -47,6 +47,16 @@ const judge = [
   }
 ];
 
+const saq = [
+  {
+    stem: '111-1111=',
+
+  },
+  {
+    stem: '3+4+43+2=',
+
+  }
+];
 
 
 
@@ -128,6 +138,32 @@ export default function  QuestionBankMangementIndex(){
     }
   }
 
+  const [ saqtask, saqdispatch ] = useReducer(saqTaskReducer,saq);
+  function saqTaskReducer(saqtask, action){
+    switch (action.type){
+      case 'add':{
+        return [ ...saqtask, JSON.parse(action.text) ];
+      }
+      
+      case 'delete': {
+         return saqtask.filter(t => t.stem !== action.id)
+      }
+
+      case 'edit': {
+        return saqtask.map(t => {
+          if (t.stem  === JSON.parse(action.text).stem){
+            return JSON.parse(action.text);
+          }else{
+            return t;
+          }
+        })
+      }
+      default: {
+        throw Error('Unknow action ' + action.type)
+      }
+    }
+  }
+
   
   
 
@@ -135,13 +171,17 @@ export default function  QuestionBankMangementIndex(){
     <multipleContext.Provider value={multipleChoicetask}>
       <singleContext.Provider value={singleChoicetask}>
       <judgeContext.Provider value={judgetask}>
+        <saqContext.Provider value={saqtask}>
         <multipleDispatchContext.Provider value={multipledispatch}>
          <singleDispatchContext.Provider value={singledispatch}>
           <judgeDispatchContext.Provider value={judgedispatch}>
+          <saqDispatchContext.Provider value={saqdispatch}>
           <Outlet></Outlet>
+          </saqDispatchContext.Provider>
           </judgeDispatchContext.Provider>
          </singleDispatchContext.Provider>
         </multipleDispatchContext.Provider>
+        </saqContext.Provider>
         </judgeContext.Provider>
       </singleContext.Provider>
     </multipleContext.Provider>

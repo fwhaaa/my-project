@@ -5,12 +5,11 @@ import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
 function SingleList() {
-  const singledispatch =useContext(singleDispatchContext)
-  const singleChoicetask = useContext(singleContext);
+  const dispatch =useContext(singleDispatchContext)
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
-  const [singledata, setSingleData] = useState([]);
+  const [data, setData] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const formItemLayout = {
@@ -31,7 +30,7 @@ function SingleList() {
       console.log('----res',res);
       let respData = res.data;
       if(res.status ===200 && respData.respCode ===1 ) {
-        setSingleData(res.data.results);
+        setData(res.data.results);
       }
     })
     .catch((err) => {
@@ -39,7 +38,7 @@ function SingleList() {
     })
   }
 
-  async function deleteSingleList(data){
+  async function deleteList(data){
     httpServer({
       url: '/teacher/deleteQuestion/singleChoice',
     }, data )
@@ -53,16 +52,30 @@ function SingleList() {
     })
   }
 
-  // useEffect(()=>{
-  //   setSingleData(singleChoicetask)
-  // },[singleChoicetask])
+  async function editList(data) {
+
+    httpServer({
+      url: '/teacher/editQuestion/singleChoice',
+    },JSON.parse(data))
+    .then(async (res) => {
+      let respData = res.data;
+      await getQuestionList();
+
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+    
+  
+
 
   useEffect(()=>{
     getQuestionList();
   },[])
   
-
-  const singleChoiceColumns = [
+  const Columns = [
   
     {
       title: '题干',
@@ -111,26 +124,15 @@ function SingleList() {
   ];
   
   
-  async function deleteSingleQuestion(item){
-
-    await deleteSingleList(item);
-    // await singledispatch (
-    //  {
-    //   type: 'delete',
-    //   id: item.id
-    //  }
-    // )
-  
+  async function deleteQuestion(item){
+    await deleteList(item);
     setVisible(false);
   }
 
-  async function EditSingleList(){
+  async function editQuestion(){
     form.validate().then(async () => {
       setConfirmLoading(true);
-      await singledispatch ({
-        type: 'edit',
-        text: JSON.stringify(form.getFieldsValue())
-      })
+      await editList(JSON.stringify(form.getFieldsValue()));  
       setTimeout(() => {
         Message.success('Success !');
         setEditVisible(false);
@@ -138,19 +140,18 @@ function SingleList() {
       }, 1500);
     })
   }
-
   return (
     <div>
       <Table
         rowKey='id'
-        columns={singleChoiceColumns}
-        data={singledata}
+        columns={Columns}
+        data={data}
       />
         <Modal
         title='单选修改'
         visible={editVisible}
         onOk={() => {
-          EditSingleList();
+          editQuestion();
         }}
         confirmLoading={confirmLoading}
         onCancel={() => setEditVisible(false)}
@@ -166,10 +167,10 @@ function SingleList() {
           }}
         >    
           <FormItem label='题干' field='stem'  disabled rules={[{ required: true }]}>
-            <Input placeholder='' />
+          <Input placeholder='' />
           </FormItem>
-            <FormItem label='选项A' field='selectA' rules={[{ required: true }]}>
-            <Input placeholder='' />
+          <FormItem label='选项A' field='selectA' rules={[{ required: true }]}>
+          <Input placeholder='' />
           </FormItem>
           <FormItem label='选项B' field='selectB' rules={[{ required: true }]}>
           <Input placeholder='' />
@@ -187,7 +188,7 @@ function SingleList() {
           visible={visible}
           onOk={() =>
           {        
-            deleteSingleQuestion(currentRecord)
+            deleteQuestion(currentRecord)
           }
             }
           onCancel={() => setVisible(false)}
@@ -200,6 +201,5 @@ function SingleList() {
         </Modal>
     </div>
   );
-}
-
+ }          
 export default SingleList;

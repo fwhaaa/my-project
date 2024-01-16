@@ -1,40 +1,42 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { singleContext, singleDispatchContext } from '../globalContext'
-import httpServer from '../../httpServer';
+import {judgeContext, judgeDispatchContext } from '../globalContext'
+
 const FormItem = Form.Item;
-  const  SingleAdd = () => {
-  const dispatch = useContext(singleDispatchContext);
+  const JudgeAdd = () => {
+  const judgedispatch = useContext(judgeDispatchContext);
+  const task =useContext(judgeContext)
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
+
+
     function sendData(data) {
         return new Promise(resolve =>{
           setTimeout(resolve,2000);
         });
       }
-    async function saveData(data){
-      httpServer({
-        url: '/teacher/addQuestion/singleChoice',
-      }, JSON.parse(data))
-      .then((res) => {
-        let respData = res.data;
 
-      })
-      .catch((err) => {
-        console.log('err',err);
-      })
-    }
+ 
 
   async function handSubmit() {
     try {
+      await form.validate();
+      const isExist = task.some((v)=>v.stem === form.getFieldValue('stem') );
+      if(isExist){
+        Message.error('题目重复');
+        return;
+      }
       Message.loading({
         id: 'question_add',
         content: '正在添加' 
         });
       setIsSending(true);
-      await saveData(JSON.stringify(form.getFieldsValue()));   
+      await judgedispatch ({
+        type: 'add',
+        text: JSON.stringify(form.getFieldsValue())
+      })   
       await sendData(JSON.stringify(form.getFieldsValue()));
       setIsSending(false);
       setIsSent(true);
@@ -50,25 +52,12 @@ const FormItem = Form.Item;
     })
     setIsSent(false);
   }
-
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
       <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
       <Input />  
       </FormItem>
-      <FormItem field={'selectA'}  disabled={isSending} label='选项A' rules={[{ required: true }]} >
-          <Input />  
-        </FormItem>
-        <FormItem field={'selectB'}  disabled={isSending} label='选项B' rules={[{ required: true }]} >
-          <Input />
-        </FormItem>
-        <FormItem field={'selectC'}  disabled={isSending} label='选项C' rules={[{ required: true }]} >
-          <Input />
-        </FormItem>
-        <FormItem field={'selectD'}  disabled={isSending} label='选项D' rules={[{ required: true }]} >
-          <Input />
-        </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
@@ -78,4 +67,4 @@ const FormItem = Form.Item;
     </div>
   );
 }
-export default SingleAdd;
+export default JudgeAdd;

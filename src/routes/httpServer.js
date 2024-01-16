@@ -1,4 +1,5 @@
 import axios from 'axios'
+import  { Message } from '@arco-design/web-react'
 // import { Message,MessageBox  } from 'element-ui';
 
 //添加一个请求拦截器
@@ -21,11 +22,7 @@ function successState(res) {
   //统一判断后端返回的错误码
   if(res.data.respCode == "1"){
     if(res.data.respMsg) {
-      // Message.success({
-      //   showClose: true,
-      //   message: res.data.respMsg,
-      //   type: 'success'
-      // });
+      Message.success('成功')
     }
   }
   else {
@@ -126,7 +123,3 @@ console.log('httpDefaultOpts',httpDefaultOpts);
 
 export default httpServer
 
-
-/*
-import httpServer from '@/components/httpServer/httpServer.js'
-*/

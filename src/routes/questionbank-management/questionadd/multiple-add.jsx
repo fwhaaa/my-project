@@ -2,56 +2,61 @@ import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { multipleContext, multipleDispatchContext } from '../globalContext'
+import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
   const  MultipleAdd = () => {
   const multipledispatch = useContext(multipleDispatchContext);
-  const tasks =useContext(multipleContext)
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
-  const multipleChoicetask = useContext(multipleContext );
-
     function sendData(data) {
         return new Promise(resolve =>{
           setTimeout(resolve,2000);
         });
       }
+    
+    async function saveData(data){
+      httpServer({
+        url: '/teacher/addQuestion/multipleChoice',
+      }, JSON.parse(data))
+      .then((res) => {
+        let respData = res.data;
+      })
+      .catch((err) => {
+        console.log('err',err);
+      })
+    }
 
  
 
-  async function multiplehandSubmit() {
-    try {
-      await form.validate();
-      const isExist = multipleChoicetask.some((v)=>v.stem === form.getFieldValue('stem') );
-      if(isExist){
-        Message.error('题目重复');
-        return;
+    async function handSubmit() {
+      try {
+        Message.loading({
+          id: 'question_add',
+          content: '正在添加' 
+          });
+        setIsSending(true);
+        await multipledispatch({
+          type: 'add',
+          text: JSON.stringify(form.getFieldsValue())
+        })
+        await saveData(JSON.stringify(form.getFieldsValue()));   
+        await sendData(JSON.stringify(form.getFieldsValue()));
+        setIsSending(false);
+        setIsSent(true);
+      } catch (e) {
+        Message.error('校验失败');
+        console.log(e);
       }
-      Message.loading({
-        id: 'question_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await multipledispatch({
-        type: 'add',
-        text: JSON.stringify(form.getFieldsValue())
-      })   
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
     }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'question_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
+    if (isSent) {
+      Message.success({
+        id: 'question_add',
+        content: '添加成功!',
+      })
+      setIsSent(false);
+    }
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
@@ -73,7 +78,7 @@ const FormItem = Form.Item;
         <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
-          <Button disabled={isSending} loading={isSending} type='primary'  onClick={multiplehandSubmit}   icon={<IconPlus /> } >提交</Button>
+          <Button disabled={isSending} loading={isSending} type='primary'  onClick={handSubmit}   icon={<IconPlus /> } >提交</Button>
         </FormItem> 
       </Form>
     </div>

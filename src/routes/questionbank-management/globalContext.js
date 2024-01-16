@@ -6,3 +6,5 @@ export const singleContext = createContext(null);
 export const singleDispatchContext = createContext(null);
 export const judgeContext = createContext(null);
 export const judgeDispatchContext = createContext(null);
+export const saqContext = createContext(null);
+export const saqDispatchContext = createContext(null);

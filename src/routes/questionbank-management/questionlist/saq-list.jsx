@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-react';
-import { judgeContext, judgeDispatchContext } from '../globalContext';
+import { saqContext, saqDispatchContext } from '../globalContext';
 
 const FormItem = Form.Item;
-function  JudgeList() {
-  const dispatch =useContext(judgeDispatchContext)
-  const task = useContext(judgeContext);
+function SaqList() {
+  const dispatch =useContext(saqDispatchContext)
+  const task = useContext(saqContext);
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
-  const [judgedata, setJudgeData] = useState(task);
+  const [data, setData] = useState(task);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const formItemLayout = {
@@ -22,7 +22,7 @@ function  JudgeList() {
   };
 
   useEffect(()=>{
-    setJudgeData(task)
+    setData(task)
   },[task])
   
 
@@ -121,7 +121,6 @@ function  JudgeList() {
           visible={visible}
           onOk={() =>
           {        
-        
             DeleteList(currentRecord)
           }
             }
@@ -137,4 +136,4 @@ function  JudgeList() {
   );
 }
 
-export default JudgeList;
+export default SaqList;

@@ -1,17 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Message, Tabs} from '@arco-design/web-react';
 import { multipleDispatchContext, multipleContext } from '../globalContext';
+import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
 function MultiipleList() {
-  const multipledispatch = useContext(multipleDispatchContext);
-  const multipleChoicetask = useContext(multipleContext );
-  const [multipledata, setMultipleData] = useState(multipleChoicetask);
+  const dispatch = useContext(multipleDispatchContext);
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
+  const [data, setData] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const TabPane = Tabs.TabPane;
   const [form] = Form.useForm();
   const formItemLayout = {
     labelCol: {
@@ -21,11 +20,42 @@ function MultiipleList() {
       span: 20,
     },
   };
-  useEffect(()=>{
-    setMultipleData(multipleChoicetask)
-  },[multipleChoicetask])
+  
+  async function getQuestionList() {
+    httpServer({
+      url: '/teacher/questionList/multipleChoice',
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log('----res',res);
+      let respData = res.data;
+      if(res.status ===200 && respData.respCode ===1 ) {
+        setData(res.data.results);
+      }
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
 
-  const multipleChoiceColumns = [
+  async function deleteList(data){
+    httpServer({
+      url: '/teacher/deleteQuestion/multipleChoice',
+    }, data )
+    .then(async (res) => {
+      let respData = res.data;
+      await getQuestionList();
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+  
+  useEffect(()=>{
+    getQuestionList();
+  },[])
+
+  const Columns = [
   
     {
       title: '题干',
@@ -72,21 +102,11 @@ function MultiipleList() {
       ),
     },
   ];
-  
 
-  async function DeleteMultipleList(item){
-    await multipledispatch (
-     {
-      type: 'delete',
-      id: item.stem
-     }
-    )
-    setVisible(false);
-  }
-  async function EditMultipleList(){
+  async function EditList(){
     form.validate().then(async () => {
       setConfirmLoading(true);
-      await multipledispatch ({
+      await dispatch ({
         type: 'edit',
         text: JSON.stringify(form.getFieldsValue())
       })
@@ -97,20 +117,26 @@ function MultiipleList() {
       }, 1500);
     })
   }
+
+  async function deleteQuestion(item){
+
+    await deleteList(item);
+    setVisible(false);
+  }
   
 
   return (
     <div>
       <Table
         rowKey='id'
-        columns={multipleChoiceColumns}
-        data={multipleChoicetask}
+        columns={Columns}
+        data={data}
       />
         <Modal
-        title='多选修改'
+        title='单选修改'
         visible={editVisible}
         onOk={() => {
-          EditMultipleList()
+          EditList();
         }}
         confirmLoading={confirmLoading}
         onCancel={() => setEditVisible(false)}
@@ -125,7 +151,7 @@ function MultiipleList() {
             style: { flexBasis: 'calc(100% - 90px)' },
           }}
         >    
-          <FormItem label='题干' field='stem' disabled  rules={[{ required: true }]}>
+          <FormItem label='题干' field='stem'  disabled rules={[{ required: true }]}>
             <Input placeholder='' />
           </FormItem>
             <FormItem label='选项A' field='selectA' rules={[{ required: true }]}>
@@ -143,11 +169,11 @@ function MultiipleList() {
         </Form>
       </Modal>
        <Modal
-          title='多选删除'
+          title='单选删除'
           visible={visible}
           onOk={() =>
           {        
-            DeleteMultipleList(currentRecord)
+            deleteQuestion(currentRecord)
           }
             }
           onCancel={() => setVisible(false)}
