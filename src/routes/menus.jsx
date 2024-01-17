@@ -107,6 +107,24 @@ function Menus() {
                 </Link>
 
         </SubMenu>
+
+        <SubMenu
+          key='paper_management'
+          title={
+            <>
+              <IconBook />试卷管理
+            </>
+          }
+        >
+                <Link to={`paper/management/add`}>
+                 <MenuItem key='paper_management_add'>添加试卷</MenuItem>
+                </Link>
+                <Link to={`paper/management/list`}>
+                 <MenuItem key='paper_management_list'>试卷列表</MenuItem>
+                </Link>
+
+        </SubMenu>
+       
        
       </Menu>
 

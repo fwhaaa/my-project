@@ -1,11 +1,10 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { singleContext, singleDispatchContext } from '../globalContext'
+
 import httpServer from '../../httpServer';
 const FormItem = Form.Item;
   const  SingleAdd = () => {
-  const dispatch = useContext(singleDispatchContext);
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();

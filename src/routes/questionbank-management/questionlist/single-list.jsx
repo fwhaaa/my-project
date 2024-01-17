@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-react';
-import { singleContext,singleDispatchContext } from '../globalContext';
+
 import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
 function SingleList() {
-  const dispatch =useContext(singleDispatchContext)
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);

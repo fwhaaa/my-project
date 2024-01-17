@@ -1,14 +1,26 @@
 import { useState, useContext } from 'react';
-import { Form, Input, Button, Message } from '@arco-design/web-react';
+import { Form, Input, Button, Message,} from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { globalDispatchContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
+import httpServer from '../httpServer';
 const FormItem = Form.Item;
   const TeacherAdd = () => {
-  const dispatch = useContext(globalDispatchContext);
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
+
+  async function saveData(data){
+    httpServer({
+      url: '/teacher/teacherManagement/add',
+    }, JSON.parse(data))
+    .then((res) => {
+      let respData = res.data;
+
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
     function sendData(data) {
         return new Promise(resolve =>{
           setTimeout(resolve,2000);
@@ -32,10 +44,7 @@ const FormItem = Form.Item;
         content: '正在添加' 
         });
       setIsSending(true);
-      await dispatch({
-        type: 'add',
-        text: JSON.stringify(form.getFieldsValue())
-      })
+      await saveData(JSON.stringify(form.getFieldsValue()))
       await sendData(JSON.stringify(form.getFieldsValue()));
       setIsSending(false);
       setIsSent(true);
@@ -54,19 +63,7 @@ const FormItem = Form.Item;
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
-      <FormItem field={'id'}  disabled={isSending} label='编号'       
-      rules={[
-         { required: true },   
-          { validator(value, cb) {
-              const regex =/^\d+$/;
-              if (!regex.test(value)) {
-                return cb('必须填写数字');
-              }
-            return cb();
-          }, }]}>
-          <Input placeholder='输入教师编号' />
-        </FormItem>
-        <FormItem field={'TeacherName'}  disabled={isSending} label='姓名'  rules={[{ required: true }]}>
+        <FormItem field={'teachername'}  disabled={isSending} label='姓名'  rules={[{ required: true }]}>
           <Input placeholder='输入教师姓名' />
         </FormItem>
         <FormItem field={'address'}  disabled={isSending} label='地址' rules={[{ required: true }]} >

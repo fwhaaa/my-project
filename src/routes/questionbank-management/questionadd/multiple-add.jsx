@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { multipleContext, multipleDispatchContext } from '../globalContext'
+import { multipleDispatchContext } from '../globalContext'
 import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;

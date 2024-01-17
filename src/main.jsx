@@ -9,7 +9,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './index.css';
-// import Root, { loader as rootLoader, action as rootAction } from "./routes/root";
 import Root from './routes/root';
 import "@arco-design/web-react/dist/css/arco.css";
 import TeacherAdd from './routes/teacher-management/teacher-add';
@@ -19,6 +18,7 @@ import TeacherMangementIndex from './routes/teacher-management';
 import QuestionAdd from './routes/questionbank-management/question-add';
 import QuestionBankMangementIndex from './routes/questionbank-management';
 import QuestionBankList from './routes/questionbank-management/questionbank-list'
+import PaperAdd from './routes/paper-management/paper-add';
 
 
 const router = createBrowserRouter([
@@ -68,6 +68,20 @@ const router = createBrowserRouter([
           {
             path: "add",
             element: <QuestionAdd />,
+          },
+          {
+            path: "list",
+            element: <QuestionBankList/>
+          },
+        ]
+      },
+      {
+        path: "paper/management",
+        element: <QuestionBankMangementIndex/>,
+        children:[ 
+          {
+            path: "add",
+            element: <PaperAdd/>,
           },
           {
             path: "list",

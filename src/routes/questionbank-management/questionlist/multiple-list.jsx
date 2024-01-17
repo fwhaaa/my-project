@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import { Table, Button, Input, Modal, Form, Message, Tabs} from '@arco-design/web-react';
-import { multipleDispatchContext, multipleContext } from '../globalContext';
+import { useEffect, useState } from 'react';
+import { Table, Button, Input, Modal, Form, Message } from '@arco-design/web-react';
+
 import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
 function MultiipleList() {
-  const dispatch = useContext(multipleDispatchContext);
+
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
@@ -45,6 +45,21 @@ function MultiipleList() {
     .then(async (res) => {
       let respData = res.data;
       await getQuestionList();
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+  async function editList(data) {
+
+    httpServer({
+      url: '/teacher/editQuestion/multipleChoice',
+    },JSON.parse(data))
+    .then(async (res) => {
+      let respData = res.data;
+      await getQuestionList();
+
     })
     .catch((err) => {
       console.log('err',err);
@@ -103,25 +118,23 @@ function MultiipleList() {
     },
   ];
 
-  async function EditList(){
+
+  async function deleteQuestion(item){
+
+    await deleteList(item);
+    setVisible(false);
+  }
+
+  async function editQuestion(){
     form.validate().then(async () => {
       setConfirmLoading(true);
-      await dispatch ({
-        type: 'edit',
-        text: JSON.stringify(form.getFieldsValue())
-      })
+      await editList(JSON.stringify(form.getFieldsValue()));  
       setTimeout(() => {
         Message.success('Success !');
         setEditVisible(false);
         setConfirmLoading(false);
       }, 1500);
     })
-  }
-
-  async function deleteQuestion(item){
-
-    await deleteList(item);
-    setVisible(false);
   }
   
 
@@ -136,7 +149,7 @@ function MultiipleList() {
         title='单选修改'
         visible={editVisible}
         onOk={() => {
-          EditList();
+          editQuestion();
         }}
         confirmLoading={confirmLoading}
         onCancel={() => setEditVisible(false)}
