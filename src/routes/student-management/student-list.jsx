@@ -1,13 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Select, Form, Message  } from '@arco-design/web-react';
-
-import { globalContext, globalDispatchContext } from './globalContext';
+import httpServer from '../httpServer';
 
 const FormItem = Form.Item;
 function StudentList() {
-  const dispatch = useContext(globalDispatchContext);
-  const tasks = useContext(globalContext);
-  const [data, setData] = useState(tasks);
+  const [data, setData] = useState();
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
@@ -22,9 +19,57 @@ function StudentList() {
       span: 20,
     },
   };
+  async function getList() {
+    httpServer({
+      url: '/teacher/studentManagement/list',
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log('----res',res);
+      let respData = res.data;
+      if(res.status ===200 && respData.respCode ===1 ) {
+        setData(res.data.results);
+      }
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+  async function deleteList(data){
+    httpServer({
+      url: '/teacher/studentManagement/delete',
+    }, data )
+    .then(async (res) => {
+      let respData = res.data;
+      await getList();
+
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+  async function editList(data) {
+
+    httpServer({
+      url: '/teacher/studentManagement/edit',
+    },JSON.parse(data))
+    .then(async (res) => {
+      let respData = res.data;
+      await getList();
+
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+
+  
   useEffect(()=>{
-      setData(tasks)
-  },[tasks])
+    getList();
+  },[])
   
   const columns = [
   
@@ -35,7 +80,7 @@ function StudentList() {
     },
     {
       title: '姓名',
-      dataIndex: 'StudentName',
+      dataIndex: 'studentname',
     },
     {
       title: '地址',
@@ -69,45 +114,40 @@ function StudentList() {
       ),
     },
   ];
-  
-  async function DeleteList(item){
-    await dispatch(
-     {
-      type: 'delete',
-      id: item.id
-     }
-    )
+
+
+//   async function handleSearch(search){
+//     if(searchType === 'StudentName'){
+//     setData(data.filter(t => t.teachername.includes(search)));
+//     }
+//     if(searchType === 'id'){
+//       setData(data.filter(t => t.id.includes(search)));
+//   }
+// }
+  async function deleteStudent(item){
+    await deleteList(item);
     setVisible(false);
   }
-  
-  async function EditList(){
+
+  async function editStudent(){
     form.validate().then(async () => {
       setConfirmLoading(true);
-      await dispatch({
-        type: 'edit',
-        text: JSON.stringify(form.getFieldsValue())
-      })
+      await editList(JSON.stringify(form.getFieldsValue()));  
       setTimeout(() => {
         Message.success('Success !');
         setEditVisible(false);
         setConfirmLoading(false);
       }, 1500);
     })
- 
-    
   }
 
-  async function handleSearch(search){
-    if(searchType === 'StudentName'){
-    setData(tasks.filter(t => t.StudentName.includes(search)));
-    }
-    if(searchType === 'id'){
-      setData(tasks.filter(t => t.id.includes(search)));
-  }
-}
+
+
+
+
   return (
     <div>
-       <Input.Group compact>
+       {/* <Input.Group compact>
             <Select defaultValue='StudentName' onChange={(value)=>{
               console.log('value',value)
               setSearchType(value);
@@ -116,7 +156,7 @@ function StudentList() {
               <Select.Option value='id'>学号</Select.Option>
             </Select>
             <Input style={{ width: '75%' }} placeholder='Please enter an address' onChange={handleSearch} />
-          </Input.Group>
+          </Input.Group> */}
       <Table
         rowKey='id'
         columns={columns}
@@ -126,7 +166,7 @@ function StudentList() {
         title='修改'
         visible={editVisible}
         onOk={() => {
-          EditList();
+          editStudent();
         }}
         confirmLoading={confirmLoading}
         onCancel={() => setEditVisible(false)}
@@ -144,7 +184,7 @@ function StudentList() {
           <FormItem label='学号' field='id' disabled rules={[{ required: true }]}>
             <Input placeholder='' />
           </FormItem>
-            <FormItem label='姓名' field='StudentName' rules={[{ required: true }]}>
+            <FormItem label='姓名' field='studentname' rules={[{ required: true }]}>
             <Input placeholder='' />
           </FormItem>
           <FormItem label='地址' required field='address' rules={[{ required: true }]}>
@@ -160,7 +200,7 @@ function StudentList() {
           visible={visible}
           onOk={() =>
           {        
-            DeleteList(currentRecord)
+            deleteStudent(currentRecord)
           }
             }
           onCancel={() => setVisible(false)}
@@ -173,6 +213,6 @@ function StudentList() {
         </Modal>
     </div>
   );
-}
 
+ }
 export default StudentList;

@@ -3,19 +3,32 @@ import { Form, Input, Button, Message, Radio } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { globalDispatchContext, globalContext } from './globalContext';
 import { AutoComplete } from '@arco-design/web-react';
+import httpServer from '../httpServer';
+
+
 const FormItem = Form.Item;
   const StudentAdd = () => {
-  const dispatch = useContext(globalDispatchContext);
-  const tasks =useContext(globalContext)
+
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
 
-    function sendData(data) {
-        return new Promise(resolve =>{
-          setTimeout(resolve,2000);
-        });
-      }
+  async function saveData(data){
+    httpServer({
+      url: '/teacher/studentManagement/add',
+    }, JSON.parse(data))
+    .then((res) => {
+      let respData = res.data;
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+  function sendData(data) {
+    return new Promise(resolve =>{
+      setTimeout(resolve,2000);
+    });
+  }
       const [email, setEmail] = useState([]);
       const handleSearch = (inputValue) => {
         const mail=[
@@ -26,43 +39,34 @@ const FormItem = Form.Item;
         ];
         setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
       }
-  async function handSubmit() {
-    try {
-      await form.validate();
-      const isExist = tasks.some((v)=>v.id === form.getFieldValue('id') );
-      if(isExist){
-        Message.error('学号重复');
-        return;
+      async function handSubmit() {
+        try {
+          await form.validate();
+          Message.loading({
+            id: 'studnet_add',
+            content: '正在添加' 
+            });
+          setIsSending(true);
+          await saveData(JSON.stringify(form.getFieldsValue()))
+          await sendData(JSON.stringify(form.getFieldsValue()));
+          setIsSending(false);
+          setIsSent(true);
+        } catch (e) {
+          Message.error('校验失败');
+          console.log(e);
+        }
       }
-
-      Message.loading({
-        id: 'student_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await dispatch({
-        type: 'add',
-        text: JSON.stringify(form.getFieldsValue())
-      })   
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
-    }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'student_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
+      if (isSent) {
+        Message.success({
+          id: 'student_add',
+          content: '添加成功!',
+        })
+        setIsSent(false);
+      }
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
-      <FormItem field={'id'}  disabled={isSending} label='学号'  
+      {/* <FormItem field={'id'}  disabled={isSending} label='学号'  
       rules={[{ required: true },   
         { validator(value, cb) {
            const regex =/^\d+$/;
@@ -72,8 +76,8 @@ const FormItem = Form.Item;
             return cb();
           }, }]}>
           <Input placeholder='输入学生学号' />
-        </FormItem>
-        <FormItem field={'StudentName'}  disabled={isSending} label='姓名'  
+        </FormItem> */}
+        <FormItem field={'studentname'}  disabled={isSending} label='姓名'  
           rules={[
             { required: true },
          
