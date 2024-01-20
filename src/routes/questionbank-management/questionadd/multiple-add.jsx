@@ -1,12 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { multipleDispatchContext } from '../globalContext'
+
 import httpServer from '../../httpServer';
 
 const FormItem = Form.Item;
   const  MultipleAdd = () => {
-  const multipledispatch = useContext(multipleDispatchContext);
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
@@ -37,10 +36,6 @@ const FormItem = Form.Item;
           content: '正在添加' 
           });
         setIsSending(true);
-        await multipledispatch({
-          type: 'add',
-          text: JSON.stringify(form.getFieldsValue())
-        })
         await saveData(JSON.stringify(form.getFieldsValue()));   
         await sendData(JSON.stringify(form.getFieldsValue()));
         setIsSending(false);
