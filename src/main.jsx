@@ -19,6 +19,7 @@ import QuestionAdd from './routes/questionbank-management/question-add';
 import QuestionBankMangementIndex from './routes/questionbank-management';
 import QuestionBankList from './routes/questionbank-management/questionbank-list'
 import PaperAdd from './routes/paper-management/paper-add';
+import PaperList from './routes/paper-management/paper-list';
 
 
 const router = createBrowserRouter([
@@ -85,7 +86,7 @@ const router = createBrowserRouter([
           },
           {
             path: "list",
-            element: <QuestionBankList/>
+            element: <PaperList/>
           },
         ]
       },
