@@ -1,8 +1,9 @@
 import { useState, useContext } from 'react';
-import { Form, Input, Button, Message } from '@arco-design/web-react';
+import { Form, Input, Button, Message, Select } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-
 import httpServer from '../../httpServer';
+const options = ['math', 'english'];
+const Option = Select.Option;
 const FormItem = Form.Item;
   const  SingleAdd = () => {
   const [ isSending, setIsSending ] = useState(false);
@@ -15,7 +16,7 @@ const FormItem = Form.Item;
       }
     async function saveData(data){
       httpServer({
-        url: '/teacher/addQuestion/singleChoice',
+        url: '/question/addQuestion/singleChoice',
       }, JSON.parse(data))
       .then((res) => {
         let respData = res.data;
@@ -53,6 +54,19 @@ const FormItem = Form.Item;
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
+
+      <FormItem field={'subject'}  disabled={isSending} label='科目' rules={[{ required: true }]} >
+      <Select
+        placeholder='Please select'
+
+      >
+        {options.map((option) => (
+          <Option key={option} disabled={isSending} value={option}>
+            {option}
+          </Option>
+        ))}
+      </Select>
+      </FormItem>
       <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
       <Input />  
       </FormItem>

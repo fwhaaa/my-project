@@ -23,7 +23,7 @@ function MultiipleList() {
   
   async function getQuestionList() {
     httpServer({
-      url: '/teacher/questionList/multipleChoice',
+      url: '/question/questionList/multipleChoice',
       method: 'GET'
     })
     .then((res) => {
@@ -40,7 +40,7 @@ function MultiipleList() {
 
   async function deleteList(data){
     httpServer({
-      url: '/teacher/deleteQuestion/multipleChoice',
+      url: '/question/deleteQuestion/multipleChoice',
     }, data )
     .then(async (res) => {
       let respData = res.data;
@@ -54,7 +54,7 @@ function MultiipleList() {
   async function editList(data) {
 
     httpServer({
-      url: '/teacher/editQuestion/multipleChoice',
+      url: '/question/editQuestion/multipleChoice',
     },JSON.parse(data))
     .then(async (res) => {
       let respData = res.data;
@@ -71,6 +71,10 @@ function MultiipleList() {
   },[])
 
   const Columns = [
+    {
+      title: '科目',
+      dataIndex: 'subject',
+    },
   
     {
       title: '题干',
@@ -164,6 +168,9 @@ function MultiipleList() {
             style: { flexBasis: 'calc(100% - 90px)' },
           }}
         >    
+          <FormItem label='科目' field='subject'  disabled rules={[{ required: true }]}>
+          <Input placeholder='' />
+          </FormItem>  
           <FormItem label='题干' field='stem'  disabled rules={[{ required: true }]}>
             <Input placeholder='' />
           </FormItem>

@@ -5,6 +5,7 @@ import httpServer from '../../httpServer';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
+
 const options = [
   {
     label: 'A',
@@ -32,6 +33,7 @@ function MultipleList(props){
   const [data, setData] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+  const {metaInfo,setMetainfo} = props;
   const formItemLayout = {
     labelCol: {
       span: 4,
@@ -43,7 +45,7 @@ function MultipleList(props){
   
   async function getQuestionList() {
     httpServer({
-      url: '/teacher/questionList/multipleChoice',
+      url: `/question/questionList/multipleChoice?subject=${metaInfo.subject}`,
       method: 'GET'
     })
     .then((res) => {
@@ -65,6 +67,10 @@ function MultipleList(props){
   },[])
 
   const Columns = [
+    {
+      title: '科目',
+      dataIndex: 'subject',
+    },
   
     {
       title: '题干',

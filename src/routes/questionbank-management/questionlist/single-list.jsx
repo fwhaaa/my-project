@@ -22,7 +22,7 @@ function SingleList() {
 
   async function getQuestionList() {
     httpServer({
-      url: '/teacher/questionList/singleChoice',
+      url: '/question/questionList/singleChoice',
       method: 'GET'
     })
     .then((res) => {
@@ -39,7 +39,7 @@ function SingleList() {
 
   async function deleteList(data){
     httpServer({
-      url: '/teacher/deleteQuestion/singleChoice',
+      url: '/question/deleteQuestion/singleChoice',
     }, data )
     .then(async (res) => {
       let respData = res.data;
@@ -54,7 +54,7 @@ function SingleList() {
   async function editList(data) {
 
     httpServer({
-      url: '/teacher/editQuestion/singleChoice',
+      url: '/question/editQuestion/singleChoice',
     },JSON.parse(data))
     .then(async (res) => {
       let respData = res.data;
@@ -75,11 +75,16 @@ function SingleList() {
   },[])
   
   const Columns = [
+    {
+      title: '科目',
+      dataIndex: 'subject',
+    },
   
     {
       title: '题干',
       dataIndex: 'stem',
     },
+
     {
       title: '选项A',
       dataIndex: 'selectA',
@@ -164,8 +169,13 @@ function SingleList() {
           wrapperCol={{
             style: { flexBasis: 'calc(100% - 90px)' },
           }}
-        >    
-          <FormItem label='题干' field='stem'  disabled rules={[{ required: true }]}>
+        >  
+
+
+          <FormItem label='科目' field='subject'  disabled rules={[{ required: true }]}>
+          <Input placeholder='' />
+          </FormItem>  
+          <FormItem label='题干' field='stem'   rules={[{ required: true }]}>
           <Input placeholder='' />
           </FormItem>
           <FormItem label='选项A' field='selectA' rules={[{ required: true }]}>

@@ -20,6 +20,7 @@ import QuestionBankMangementIndex from './routes/questionbank-management';
 import QuestionBankList from './routes/questionbank-management/questionbank-list'
 import PaperAdd from './routes/paper-management/paper-add';
 import PaperList from './routes/paper-management/paper-list';
+import ExamAdd from './routes/exam-management/exam-add';
 
 
 const router = createBrowserRouter([
@@ -90,6 +91,20 @@ const router = createBrowserRouter([
           },
         ]
       },
+      {
+        path: "exam/management",
+        children:[ 
+          {
+            path: "add",
+            element: <ExamAdd/>,
+          },
+          {
+            path: "list",
+            element: <PaperList/>
+          },
+        ]
+      },
+      
       
     ]
   },

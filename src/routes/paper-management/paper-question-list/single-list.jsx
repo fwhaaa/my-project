@@ -11,6 +11,7 @@ function SingleList(props) {
   const [data, setData] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+  const {metaInfo,setMetainfo} = props;
   const formItemLayout = {
     labelCol: {
       span: 4,
@@ -21,8 +22,8 @@ function SingleList(props) {
   };
 
   async function getQuestionList() {
-    httpServer({
-      url: '/teacher/questionList/singleChoice',
+    httpServer({ 
+      url:`/question/questionList/singleChoice?subject=${metaInfo.subject}`,
       method: 'GET'
     })
     .then((res) => {
@@ -45,7 +46,10 @@ function SingleList(props) {
   },[])
   
   const Columns = [
-  
+    {
+      title: '科目',
+      dataIndex: 'subject',
+    },
     {
       title: '题干',
       dataIndex: 'stem',
@@ -87,7 +91,7 @@ function SingleList(props) {
   
   
 
-  async function addQuestion(){
+  async function addQuestion(props){
     form.validate().then(async () => {
       setConfirmLoading(true);
       console.log('formdata',form.getFieldsValue());

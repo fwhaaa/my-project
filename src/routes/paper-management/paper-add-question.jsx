@@ -43,10 +43,10 @@ function  PaperAddQuestion(props) {
     <div>
       <Tabs>
       <TabPane key='SingleChoice' title='单选题'>
-        <SingleList questionList={questionList} setQuestionList={setQuestionList}></SingleList>    
+        <SingleList metaInfo={metaInfo} setMetainfo={setMetainfo} questionList={questionList} setQuestionList={setQuestionList}></SingleList>    
       </TabPane>
       <TabPane key='multipleChoice' title='多选题' >
-        <MultipleList questionList={questionList} setQuestionList={setQuestionList}></MultipleList>
+        <MultipleList metaInfo={metaInfo} setMetainfo={setMetainfo}  questionList={questionList} setQuestionList={setQuestionList}></MultipleList>
       </TabPane>
       {/* <TabPane key='judge' title='判断题'>
         <JudgeList></JudgeList>

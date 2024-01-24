@@ -76,18 +76,18 @@ function Menus() {
         </SubMenu>
 
         <SubMenu
-          key='2'
+          key='exam_management'
           title={
             <>
               <IconPenFill /> 考试管理
             </>
           }
         >
-                <Link to={`contacts/1`}>
-                 <MenuItem key='2_0'>添加考试</MenuItem>
+                <Link to={`exam/management/add`}>
+                 <MenuItem key='exam_management_add'>添加考试</MenuItem>
                 </Link>
-                <Link to={`contacts/2`}>
-                 <MenuItem key='2_1'>考试列表</MenuItem>
+                <Link to={`exam/management/list`}>
+                 <MenuItem key='exam_management_list'>考试列表</MenuItem>
                 </Link>
 
         </SubMenu> 
