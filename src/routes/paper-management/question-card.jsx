@@ -6,7 +6,7 @@ const CheckboxGroup = Checkbox.Group;
 
 
 
-const QuestionCard = ({question, index}) => {
+const QuestionCard = ({question, index }) => {
     console.log('question in card',question);
     const options = [
         {
@@ -25,7 +25,7 @@ const QuestionCard = ({question, index}) => {
         },
       ];
   return (
-    <Row gutter={20}>
+     <Row gutter={20}>
         <Col span={24}>
             <Card
             title={ `${index}、${question.stem}` }

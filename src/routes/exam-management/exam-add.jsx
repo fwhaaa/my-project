@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Input, Button, Message, Select, InputNumber } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { AutoComplete } from '@arco-design/web-react';
 import httpServer from '../httpServer';
 const FormItem = Form.Item;
   const ExamAdd = () => {
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
+  const [ options, setOptions ] = useState([]);
   const [ form ] =Form.useForm();
   const [ data, setData] = useState();
-  const options = ['math', 'english'];
+  const [ subject , setSubject] =useState();
+  const subjectOptions = ['math', 'english'];
+
   const Option = Select.Option; 
 
   async function saveData(data){
@@ -57,6 +59,42 @@ const FormItem = Form.Item;
     setIsSent(false);
   }
 
+  async function getList(subject) {
+    httpServer({
+      url: `/exam/examManagement/paper?subject=${subject}`,
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log('----res',res);
+      const paperOptions =[];
+      if(res.status ===200 && res.data.respCode ===1 ) {
+        res.data.results.forEach(v=>{
+          paperOptions.push({
+            label: v.papername,
+            value: v.id,
+          })
+        });
+        console.log('paperOptions',paperOptions);
+        setOptions(paperOptions);
+        setData(res.data.results);
+      }
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+    
+  }
+  useEffect(()=>{
+     getList(subject);
+  },[subject])
+
+  console.log(data);
+
+ 
+
+
+
+
   
   return (
     <div>
@@ -65,8 +103,10 @@ const FormItem = Form.Item;
           <Input placeholder='输入考试名称' />
         </FormItem>
        <FormItem field={'subject'}  disabled={isSending} label='科目' rules={[{ required: true }]} >
-        <Select placeholder='Please select'>
-        {options.map((option) => (
+        <Select placeholder='Please select' onChange={(value,options)=>{
+          setSubject(value);
+        }}>
+        {subjectOptions.map((option) => (
           <Option key={option} disabled={isSending} value={option}>
             {option}
           </Option>
@@ -83,13 +123,11 @@ const FormItem = Form.Item;
         parser={(value) => value.replace(/,/g, '')}
       />
         </FormItem>
-      
         <FormItem field={'paper'}  disabled={isSending} label='试卷' rules={[{ required: true }]} >
+        <Select placeholder='Please select' options={options}>
+
+      </Select>
         </FormItem>
-       
-       
-
-
         <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
