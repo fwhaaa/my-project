@@ -79,6 +79,10 @@ function SingleList() {
       title: '科目',
       dataIndex: 'subject',
     },
+    {
+      title: '编号',
+      dataIndex: 'id',
+    },
   
     {
       title: '题干',
@@ -174,7 +178,10 @@ function SingleList() {
 
           <FormItem label='科目' field='subject'  disabled rules={[{ required: true }]}>
           <Input placeholder='' />
-          </FormItem>  
+          </FormItem>
+          <FormItem label='编号' field='id'  disabled rules={[{ required: true }]}>
+          <Input placeholder='' />
+          </FormItem>    
           <FormItem label='题干' field='stem'   rules={[{ required: true }]}>
           <Input placeholder='' />
           </FormItem>

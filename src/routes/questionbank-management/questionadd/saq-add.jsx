@@ -1,60 +1,72 @@
-import { useState, useContext } from 'react';
-import { Form, Input, Button, Message } from '@arco-design/web-react';
+import { useState } from 'react';
+import { Form, Input, Button, Message, Select} from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-import { saqContext, saqDispatchContext } from '../globalContext'
 
+import httpServer from '../../httpServer';
+const options = ['math', 'english'];
+const Option = Select.Option;
 const FormItem = Form.Item;
-  const SaqAdd = () => {
-  const dispatch = useContext(saqDispatchContext);
-  const task  =useContext(saqContext)
+  const  SaqAdd = () => {
   const [ isSending, setIsSending ] = useState(false);
   const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
-
-
     function sendData(data) {
         return new Promise(resolve =>{
           setTimeout(resolve,2000);
         });
       }
+    
+    async function saveData(data){
+      httpServer({
+        url: '/question/addQuestion/saq',
+      }, JSON.parse(data))
+      .then((res) => {
+        let respData = res.data;
+      })
+      .catch((err) => {
+        console.log('err',err);
+      })
+    }
 
  
 
-  async function handSubmit() {
-    try {
-      await form.validate();
-      const isExist = task.some((v)=>v.stem === form.getFieldValue('stem') );
-      if(isExist){
-        Message.error('题目重复');
-        return;
+    async function handSubmit() {
+      try {
+        Message.loading({
+          id: 'question_add',
+          content: '正在添加' 
+          });
+        setIsSending(true);
+        await saveData(JSON.stringify(form.getFieldsValue()));   
+        await sendData(JSON.stringify(form.getFieldsValue()));
+        setIsSending(false);
+        setIsSent(true);
+      } catch (e) {
+        Message.error('校验失败');
+        console.log(e);
       }
-      Message.loading({
-        id: 'question_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await dispatch ({
-        type: 'add',
-        text: JSON.stringify(form.getFieldsValue())
-      })   
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
     }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'question_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
+    if (isSent) {
+      Message.success({
+        id: 'question_add',
+        content: '添加成功!',
+      })
+      setIsSent(false);
+    }
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
+      <FormItem field={'subject'}  disabled={isSending} label='科目' rules={[{ required: true }]} >
+      <Select
+        placeholder='Please select'
+      >
+        {options.map((option) => (
+          <Option key={option} disabled={isSending} value={option}>
+            {option}
+          </Option>
+        ))}
+      </Select>
+      </FormItem>
       <FormItem field={'stem'}  disabled={isSending} label='题干' rules={[{ required: true }]} >
       <Input />  
       </FormItem>

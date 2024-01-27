@@ -125,8 +125,7 @@ const FormItem = Form.Item;
         </FormItem>
         <FormItem field={'paper'}  disabled={isSending} label='试卷' rules={[{ required: true }]} >
         <Select placeholder='Please select' options={options}>
-
-      </Select>
+        </Select>
         </FormItem>
         <FormItem wrapperCol={{ offset: 5 }}>
         </FormItem>

@@ -75,6 +75,10 @@ function MultiipleList() {
       title: '科目',
       dataIndex: 'subject',
     },
+    {
+      title: '编号',
+      dataIndex: 'id',
+    },
   
     {
       title: '题干',
@@ -170,7 +174,10 @@ function MultiipleList() {
         >    
           <FormItem label='科目' field='subject'  disabled rules={[{ required: true }]}>
           <Input placeholder='' />
-          </FormItem>  
+          </FormItem>
+          <FormItem label='编号' field='id'  disabled rules={[{ required: true }]}>
+          <Input placeholder='' />
+          </FormItem>    
           <FormItem label='题干' field='stem'  disabled rules={[{ required: true }]}>
             <Input placeholder='' />
           </FormItem>
