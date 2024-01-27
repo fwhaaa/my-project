@@ -247,7 +247,7 @@ function PaperList() {
           focusLock={true}
          >
           <p>
-            确认删除学生?
+            确认删除试卷?
           </p>
         </Modal>
     </div>
