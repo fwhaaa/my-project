@@ -89,7 +89,6 @@ export default function  QuestionBankMangementIndex(){
 
       <judgeContext.Provider value={judgetask}>
         <saqContext.Provider value={saqtask}>
-
           <judgeDispatchContext.Provider value={judgedispatch}>
           <saqDispatchContext.Provider value={saqdispatch}>
           <Outlet></Outlet>
