@@ -22,6 +22,9 @@ import PaperAdd from './routes/paper-management/paper-add';
 import PaperList from './routes/paper-management/paper-list';
 import ExamAdd from './routes/exam-management/exam-add';
 import ExamList from './routes/exam-management/exam-list';
+import Marking from './routes/score-management/marking';
+import MarkingList from './routes/score-management/markingList';
+import ScorePaperList from './routes/score-management/examList';
 
 
 const router = createBrowserRouter([
@@ -103,6 +106,23 @@ const router = createBrowserRouter([
             path: "list",
             element: <ExamList/>
           },
+        ]
+      },
+      {
+        path: "score/management",
+        children:[ 
+          {
+            path: "marking",
+            element: <Marking />,
+          },
+          {
+            path: "markingList/:subject",
+            element: <MarkingList />,
+          },
+          {
+            path: "markingList/:examId",
+            element: <ScorePaperList/>
+          }
         ]
       },
       
