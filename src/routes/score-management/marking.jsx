@@ -1,4 +1,4 @@
-import { Form, Input, Button, Checkbox, Radio, Grid, Card } from '@arco-design/web-react';
+import { Form, Input, Button, Checkbox, Radio, Grid, Card,  InputNumber } from '@arco-design/web-react';
 import{ useEffect, useState   } from 'react';
 import { useParams } from "react-router-dom";
 import httpServer from '../httpServer';
@@ -16,9 +16,13 @@ const Marking = () => {
   const [judge,setJudge] = useState();
   const [saq,setSaq] = useState();
   const [question,setQuestion] = useState();
-  const {examId} = useParams();
-  const {studentId} = useParams();
-  const {paperId} = useParams();
+  const [singleScore,setSingleScore] = useState();
+  const [multipleScore,setMultipleScore] = useState();
+  const [judgeScore,setJudgeScore] = useState();
+  const [saqScore,setSaqScore] = useState();
+  const {examId,studentId,paperId} = useParams();
+  const [examInfo,setExamInfo] = useState();
+
 
 
   async function saveData(data){
@@ -52,10 +56,32 @@ const Marking = () => {
           setMultiple(question['multiple']);
           setJudge(question['judge']);
           setSaq(question['saq']);
+          setSingleScore(v.singlescore);
+          setMultipleScore(v.multiplescore);
+          setJudgeScore(v.judgescore);
+          setSaqScore(v.saqscore);
+          console.log('-------v',v);
           setQuestion(question);
-          
         })
  
+      }
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+
+  async function getExamInfo() {
+    console.log('-------examId',examId);
+    httpServer({
+      url: `/exam/examManagement/list?examId=${examId}`,
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log('----res',res);
+      let respData = res.data;
+      if(res.status ===200 && respData.respCode ===1 ) {
+        setExamInfo(res.data.results[0]);
       }
     })
     .catch((err) => {
@@ -103,14 +129,15 @@ const Marking = () => {
   useEffect(()=>{
      getList();
      getAnser();
+     getExamInfo();
   },[])
       
   console.log('single',single);
    console.log('enter');
-
+   console.log('---------examInfo',examInfo);
   return (
     <div style={{padding:'40px 60px'}}>
-      
+      <h1>{examInfo?.examname}</h1>
       <Form  autoComplete='off' form={form}  layout='vertical' style={{width:'600px'}}> 
        <h3 style={{textAlign: 'left'}}>单选题</h3>
        {
@@ -120,7 +147,7 @@ const Marking = () => {
 
            const rightAnswer = singleObj.rightAnswer;
            console.log('--------rightAnswer',rightAnswer);
-           const studentAnswer = answer[`single_${singleObj.id}`];
+           const studentAnswer = answer?.[`single_${singleObj.id}`];
            console.log('--------studentAnswer',studentAnswer);
            const label = rightAnswer === studentAnswer 
            ? (<span style={{ color: 'green' }}> { `${index+1}、${singleObj.stem}` } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答正确</span>) 
@@ -164,11 +191,18 @@ const Marking = () => {
           ];
           console.log('multipleObj',multipleObj);
 
-
+          const rightAnswer = multipleObj.rightAnswer;
+          console.log('--------rightAnswer',rightAnswer);
+          const studentAnswer = answer?.[`multiple_${multipleObj.id}`];
+          console.log('--------studentAnswer',studentAnswer);
+          const label = rightAnswer === studentAnswer 
+          ? (<span style={{ color: 'green' }}> { `${index+1}、${multipleObj.stem}` } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答正确</span>) 
+          : (<span style={{ color: 'red' }}> {`${index+1}、${multipleObj.stem} `}
+           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答错误！正确答案:  </span>{`${rightAnswer}`}</span>);
 
            return (
           
-            <FormItem field={`multiple_${multipleObj.id}`} label={`${index+1}、${multipleObj.stem}`} style={{textAlign: 'left'}}>
+            <FormItem field={`multiple_${multipleObj.id}`} label={label} style={{textAlign: 'left'}}>
                <CheckboxGroup direction='vertical' options={options} />
             </FormItem>
            )
@@ -179,9 +213,17 @@ const Marking = () => {
         judge && Object.keys(judge).map((v,index)=> {
           const judgeObj = judge[v];
           console.log('judgeObj',judgeObj);
+          const rightAnswer = judgeObj.rightAnswer;
+          console.log('--------rightAnswer',rightAnswer);
+          const studentAnswer = answer?.[`judge_${judgeObj.id}`];
+          console.log('--------studentAnswer',studentAnswer);
+          const label = rightAnswer === studentAnswer 
+          ? (<span style={{ color: 'green' }}> { `${index+1}、${judgeObj.stem}` } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答正确</span>) 
+          : (<span style={{ color: 'red' }}> {`${index+1}、${judgeObj.stem} `}
+           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答错误！正确答案:  </span>{rightAnswer === 'true'? '正确' : '错误'}</span>);
            return (
           
-            <FormItem field={`judge_${judgeObj.id}`} label={`${index+1}、${judgeObj.stem}`} style={{textAlign: 'left'}}>
+            <FormItem field={`judge_${judgeObj.id}`} label={label} style={{textAlign: 'left'}}>
                 <RadioGroup direction='vertical' >
                     <Radio value='true'>正确</Radio>
                     <Radio value='false'>错误</Radio>
@@ -195,11 +237,36 @@ const Marking = () => {
         saq && Object.keys(saq).map((v,index)=> {
           const saqObj = saq[v];
           console.log('saqObj',saqObj);
+          console.log('----saqsocre',saqScore);
+          console.log('----singlesocre',singleScore);
+          console.log('----multiplesocre',multipleScore);
+          console.log('----judgesocre',judgeScore);
            return (
-          
-            <FormItem field={`saq_${saqObj.id}`} label={`${index+1}、${saqObj.stem}`} style={{textAlign: 'left'}}>
-                <Input></Input>
-            </FormItem>
+  
+            // <FormItem field={`saq_${saqObj.id}`} label={`${index+1}、${saqObj.stem}`} style={{textAlign: 'left'}} disabled>
+            //     <Input></Input>
+            //     <FormItem field={`saq_${saqObj.id}`} tyle={{textAlign: 'left'}} disabled>
+            //     </FormItem>
+            // </FormItem>
+            <Form.Item  field={`saq_${saqObj.id}`} label={`${index+1}、${saqObj.stem}`} style={{textAlign: 'left'}} disabled>
+            <Grid.Row gutter={8}>
+              <Grid.Col span={12}>
+              <FormItem field={`saq_${saqObj.id}`} tyle={{textAlign: 'left'}} disabled>
+              <Input></Input>
+              </FormItem>
+              </Grid.Col>
+              <Grid.Col span={12}>
+                <Form.Item field={`saq_${saqObj.id}_score`}  rules={[{ required: true }]}>
+                  <InputNumber
+                    placeholder={`请输入分数,最高分${saqScore}`}
+                    min={0}
+                    max={saqScore}
+                  />
+                </Form.Item>
+              </Grid.Col>
+            </Grid.Row>
+          </Form.Item>
+
            )
          })
        }
