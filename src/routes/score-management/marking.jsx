@@ -7,6 +7,7 @@ const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
+
 const Marking = () => {
   const [ form ] =Form.useForm();
   const [data, setData] = useState();
@@ -113,15 +114,51 @@ const Marking = () => {
   async function handSubmit() {
     const data =  form.getFieldsValue()
     console.log('-------data',data);
-    const params = {
-     studentId: '001',
-     paperId,
-     answer: JSON.stringify(data)
-    };
+    let totalScore = 0;
+    Object.keys(data).map((key)=>{
+      const studentAnswer = data[key];
+      console.log('-------key',key,studentAnswer );
+      const [ type,questionId ] = key.split('_');
+      console.log('---------type,questionId ',type,questionId);
+      const questionInfo = question[type][questionId];
+      console.log('---------questionInfo ',questionInfo);
+      const rightAnswer = questionInfo?.rightAnswer;
+      console.log('---------rightAnswer',rightAnswer);
+      if(type === 'multiple'){
+        const rightAnswerStr = rightAnswer.split(',')?.sort().join('');
+        const studentAnswerStr = studentAnswer?.sort().join('');
+        if(rightAnswerStr === studentAnswerStr){
+          totalScore += Number(multipleScore);
+        }
+      } else if( rightAnswer===studentAnswer ){
+        switch (type){
+          case 'single':{
+            totalScore += Number(singleScore);
+            break;
+          }
+          case 'judge':{
+            totalScore += Number(judgeScore);
+            break;
+          }
+        }
+        console.log( '----------------totalScore',totalScore);
+      }  else if(studentAnswer.score !== undefined){
+      console.log('scorein ',studentAnswer);
+        console.log('score in ',studentAnswer);
+        totalScore += Number(studentAnswer?.score);
+        console.log('--------------total',totalScore);
+    }
 
-    await saveData(params)
-    console.log('answer',JSON.stringify(data));
-  }
+
+    // const params = {
+    //  studentId: '001',
+    //  paperId,
+    //  answer: JSON.stringify(data)
+    // };
+
+    // await saveData(params)
+    // console.log('answer',JSON.stringify(data));
+  })}
 
  
 
@@ -144,7 +181,6 @@ const Marking = () => {
         single && Object.keys(single).map((v,index)=> {
            const singleObj = single[v];
            console.log('singleObj',singleObj);
-
            const rightAnswer = singleObj.rightAnswer;
            console.log('--------rightAnswer',rightAnswer);
            const studentAnswer = answer?.[`single_${singleObj.id}`];
@@ -153,7 +189,6 @@ const Marking = () => {
            ? (<span style={{ color: 'green' }}> { `${index+1}、${singleObj.stem}` } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答正确</span>) 
            : (<span style={{ color: 'red' }}> {`${index+1}、${singleObj.stem} `}
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答错误！正确答案:  </span>{`${rightAnswer}`}</span>);
-
           return (     
             <FormItem field={`single_${singleObj.id}`} label={label} style={{textAlign: 'left'}}>
               <RadioGroup direction='vertical' >
@@ -191,11 +226,14 @@ const Marking = () => {
           ];
           console.log('multipleObj',multipleObj);
 
-          const rightAnswer = multipleObj.rightAnswer;
+          const rightAnswer = multipleObj.rightAnswer.split(',');
           console.log('--------rightAnswer',rightAnswer);
           const studentAnswer = answer?.[`multiple_${multipleObj.id}`];
           console.log('--------studentAnswer',studentAnswer);
-          const label = rightAnswer === studentAnswer 
+          const rightAnswerStr = rightAnswer?.sort().join('');
+          const studentAnswerStr = studentAnswer?.sort().join('');
+
+          const label = rightAnswerStr === studentAnswerStr 
           ? (<span style={{ color: 'green' }}> { `${index+1}、${multipleObj.stem}` } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答正确</span>) 
           : (<span style={{ color: 'red' }}> {`${index+1}、${multipleObj.stem} `}
            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答错误！正确答案:  </span>{`${rightAnswer}`}</span>);
@@ -256,7 +294,7 @@ const Marking = () => {
               </FormItem>
               </Grid.Col>
               <Grid.Col span={12}>
-                <Form.Item field={`saq_${saqObj.id}_score`}  rules={[{ required: true }]}>
+                <Form.Item field={`saq_${saqObj.id}.score`}  rules={[{ required: true }]}>
                   <InputNumber
                     placeholder={`请输入分数,最高分${saqScore}`}
                     min={0}
