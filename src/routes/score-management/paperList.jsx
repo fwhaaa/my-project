@@ -2,11 +2,13 @@ import{ useState, React, useEffect } from 'react';
 import { Table,Button,Modal } from '@arco-design/web-react';
 import httpServer from '../httpServer';
 import { useMatches, useParams, Link, useNavigate, Outlet, } from "react-router-dom";
+import { Card } from '@arco-design/web-react';
+const { Grid } = Card;
 
-
-
-
-const  MarkingList = () => {
+const ScorePaperList = () => {
+  const  {examId} = useParams();
+  console.log('----------------------------',useParams());
+  console.log('*******',examId);
   const [data, setData] = useState();
   const [visible, setVisible] = useState(false);
   const [currentRecord,setCurrentRecord] = useState(undefined);
@@ -17,8 +19,9 @@ const  MarkingList = () => {
   console.log('subject',subject);
   console.log('matches',matches);
   async function getList() {
+    console.log('@@@@@@@@@@@@@@@@',examId);
     httpServer({
-      url: `/exam/examManagement/list?subject=${subject}`,
+      url: `/pending_approval/list/paper?examId=${examId}`,
       method: 'GET'
     })
     .then((res) => {
@@ -35,20 +38,16 @@ const  MarkingList = () => {
   
 const columns = [
   {
+    title: '试卷编号',
+    dataIndex: 'paperId',
+  },
+  {
     title: '考试编号',
-    dataIndex: 'id',
+    dataIndex: 'examId',
   },
   {
-    title: '科目',
-    dataIndex: 'subject',
-  },
-  {
-    title: '考试名称',
-    dataIndex: 'examname',
-  },
-  {
-    title: '考试时长',
-    dataIndex: 'time',
+    title: '学生',
+    dataIndex: 'studentId',
   },
   {
     title: '操作',
@@ -56,7 +55,7 @@ const columns = [
     render: (_, record) => ( 
       <div>
         <Button type='primary' status='default' onClick={()=> {
-           navigate(`/score/management/markingList/${record.id}`);
+           navigate(`/score/management/marking/${record.examId}/${record.paperId}/${record.studentId}`);
         }} >
         阅卷
       </Button>  
@@ -77,4 +76,4 @@ useEffect(()=>{
     </div>;
 };
 
-export default MarkingList;
+export default ScorePaperList;

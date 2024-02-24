@@ -1,35 +1,81 @@
-import { Card } from '@arco-design/web-react';
-import { Link } from "react-router-dom";
-const { Grid } = Card;
+import{ useState, React, useEffect } from 'react';
+import { Table,Button,Modal } from '@arco-design/web-react';
+import httpServer from '../httpServer';
+import { useMatches, useParams, Link, useNavigate, Outlet, } from "react-router-dom";
 
-const ScorePaperList = () => {
-    console.log('enterscorepaperlist');
-  return (
-    <Card bordered={false} style={{ width: '100%' }}>
-      {['math', 'english','art','sports','software'].map((value, index) => {
-        const hoverable = index % 2 === 0;
-        return (
-          <Grid
-            key={index}
-            hoverable={hoverable}
-            style={{
-              width: '300px',
-            }}
-          >
-              <Card
-                    className='card-demo-in-grid'
-                    title='科目'
-                    extra={<Link  to={`/score/management/markingList/${value}`}>查看</Link>}
-                    bordered={false}
-                  >
-                    {value}
-                  </Card>
-          </Grid>
-        );
-      })}
-    </Card>
 
-  );
+
+
+const  ScoreExamList = () => {
+  const [data, setData] = useState();
+  const [visible, setVisible] = useState(false);
+  const [currentRecord,setCurrentRecord] = useState(undefined);
+  const navigate =useNavigate();
+  const matches = useMatches();
+  // const subject = matches[0].params.subject;
+  const  {subject} = useParams();
+  console.log('subject',subject);
+  console.log('matches',matches);
+  async function getList() {
+    httpServer({
+      url: `/exam/examManagement/list?subject=${subject}`,
+      method: 'GET'
+    })
+    .then((res) => {
+      console.log('----res',res);
+      let respData = res.data;
+      if(res.status ===200 && respData.respCode ===1 ) {
+        setData(res.data.results);
+      }
+    })
+    .catch((err) => {
+      console.log('err',err);
+    })
+  }
+  
+const columns = [
+  {
+    title: '考试编号',
+    dataIndex: 'id',
+  },
+  {
+    title: '科目',
+    dataIndex: 'subject',
+  },
+  {
+    title: '考试名称',
+    dataIndex: 'examname',
+  },
+  {
+    title: '考试时长',
+    dataIndex: 'time',
+  },
+  {
+    title: '操作',
+    dataIndex: 'op',
+    render: (_, record) => ( 
+      <div>
+        <Button type='primary' status='default' onClick={()=> {
+           navigate(`/score/management/paperList/${record.id}`);
+
+        }} >
+        阅卷
+      </Button>  
+      </div>  
+    ),
+  },
+];
+useEffect(()=>{
+  getList();
+},[])
+    
+
+  console.log('----enterpaperlist');
+  return <div>
+    
+      <Table columns={columns} data={data}></Table>
+
+    </div>;
 };
 
-export default ScorePaperList;
+export default ScoreExamList;

@@ -133,8 +133,8 @@ function Menus() {
             </>
           }
         >
-                <Link to={`score/management/marking`}>
-                 <MenuItem key='score_management_marking'>阅卷</MenuItem>
+                <Link to={`score/management/subject`}>
+                 <MenuItem key='score_management_subject'>阅卷</MenuItem>
                 </Link>
                 <Link to={`score/management/list`}>
                  <MenuItem key='score_management_list'>成绩列表</MenuItem>
