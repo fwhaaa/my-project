@@ -136,8 +136,8 @@ const Marking = () => {
    console.log('enter');
    console.log('---------examInfo',examInfo);
   return (
-    <div style={{padding:'40px 60px'}}>
-      <h1>{examInfo?.examname}</h1>
+    <div style={{ padding:'40px 60px' }}>
+      <h1 style={{ marginTop: 0, textAlign:'center'}}> {examInfo?.examname}</h1>
       <Form  autoComplete='off' form={form}  layout='vertical' style={{width:'600px'}}> 
        <h3 style={{textAlign: 'left'}}>单选题</h3>
        {
