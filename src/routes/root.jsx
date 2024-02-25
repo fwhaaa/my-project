@@ -19,7 +19,18 @@ class Root extends React.Component {
       collapsed: !this.state.collapsed,
     });
   };
-
+  // function BeforeRouterEnter() {
+  //   const outlet = useRoutes(router);
+  //   const location = useLocation();
+  //   let token = localStorage.getItem("react-management-token");
+  //   if (location.pathname === "login" && token) {
+  //     return <ToPage1></ToPage1>;
+  //   }
+  //   if (location.pathname !== "/login" && !token) {
+  //     return <ToLogin />;
+  //   }
+  //   return outlet;
+  // }
   render() {
     return (
       <Layout className='layout-collapse-demo'>

@@ -59,7 +59,7 @@ const columns = [
            navigate(`/score/management/paperList/${record.id}`);
 
         }} >
-        阅卷
+        查看
       </Button>  
       </div>  
     ),

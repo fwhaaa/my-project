@@ -50,6 +50,10 @@ const columns = [
     dataIndex: 'studentId',
   },
   {
+    title: '分数',
+    dataIndex: 'score',
+  },
+  {
     title: '操作',
     dataIndex: 'op',
     render: (_, record) => ( 

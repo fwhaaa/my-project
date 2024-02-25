@@ -27,8 +27,9 @@ const Marking = () => {
 
 
   async function saveData(data){
+    console.log('--------savedata',data);
     httpServer({
-      url: `/pending_approval/add/exam`
+      url: `/pending_approval/add/score`
     }, data)
     .then((res) => {
       let respData = res.data;
@@ -113,17 +114,12 @@ const Marking = () => {
 
   async function handSubmit() {
     const data =  form.getFieldsValue()
-    console.log('-------data',data);
     let totalScore = 0;
     Object.keys(data).map((key)=>{
       const studentAnswer = data[key];
-      console.log('-------key',key,studentAnswer );
       const [ type,questionId ] = key.split('_');
-      console.log('---------type,questionId ',type,questionId);
       const questionInfo = question[type][questionId];
-      console.log('---------questionInfo ',questionInfo);
       const rightAnswer = questionInfo?.rightAnswer;
-      console.log('---------rightAnswer',rightAnswer);
       if(type === 'multiple'){
         const rightAnswerStr = rightAnswer.split(',')?.sort().join('');
         const studentAnswerStr = studentAnswer?.sort().join('');
@@ -148,17 +144,13 @@ const Marking = () => {
         totalScore += Number(studentAnswer?.score);
         console.log('--------------total',totalScore);
     }
-
-
-    // const params = {
-    //  studentId: '001',
-    //  paperId,
-    //  answer: JSON.stringify(data)
-    // };
-
-    // await saveData(params)
-    // console.log('answer',JSON.stringify(data));
-  })}
+  })
+      saveData({
+        studentId,
+        examId,
+        totalScore,
+      })
+}
 
  
 
