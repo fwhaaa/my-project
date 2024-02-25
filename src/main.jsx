@@ -26,7 +26,7 @@ import ScoreExamList from './routes/score-management/examList';
 import ScorePaperList from './routes/score-management/paperList';
 import Subject from './routes/score-management/subject';
 import Marking from './routes/score-management/marking';
-import Login from './routes/Login/Login';
+import Login from './routes/Login';
 
 const router = createBrowserRouter([
   {
