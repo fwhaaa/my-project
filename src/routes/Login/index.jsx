@@ -2,11 +2,20 @@ import { Form, Input, Button, Checkbox, Message } from '@arco-design/web-react';
 import Password from '@arco-design/web-react/es/Input/password';
 import httpServer from '../httpServer'; 
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Login = () => {
     const FormItem = Form.Item;
     const [ form ] =Form.useForm();
     const navigate =useNavigate();
+    localStorage.getItem('username');
+    function BeforeRouterEnter() {
+      const username = localStorage.getItem("username");
+      if (username) {
+       navigate('/')
+      }
+    } 
+  
     async function login(data) {
         console.log('-------------username',data);
         httpServer({
@@ -36,7 +45,10 @@ const Login = () => {
          login(data);
          
     }
-
+  
+  useEffect(()=>{
+     BeforeRouterEnter()
+   },[])
   return (
     <div style={{ display:'flex',justifyContent: 'center',alignItems: 'center',width:'100%'}} >
         <Form form={form} style={{ width: '600px' }} autoComplete='off'>

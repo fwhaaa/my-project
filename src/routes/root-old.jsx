@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Layout, Menu, Breadcrumb } from '@arco-design/web-react';
 import Menus from './menus';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { PageHeader, Radio } from '@arco-design/web-react';
 import Head from './header';
 
@@ -11,25 +11,30 @@ const Footer = Layout.Footer;
 const Content = Layout.Content;
 const username = localStorage.getItem('username');
 
-
-function Root() {
-  const navigate = useNavigate();
-  const [collapsed,setCollapsed] = useState(false);
-  function handleCollapsed(){
-   setCollapsed(collapsed => !collapsed );
+class Root extends React.Component {
+  state = {
+    collapsed: false,
+  };
+  handleCollapsed = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+function BeforeRouterEnter() {
+    const outlet = useRoutes(router);
+    const location = useLocation();
+    const username = localStorage.getItem("username");
+    if (username != null) {
+      return <ToPage1></ToPage1>;
+    }
+    if (location.pathname !== "/login" && !token) {
+      return <ToLogin />;
+    }
+    return outlet;
   }
   
-  function BeforeRouterEnter() {
-    const username = localStorage.getItem("username");
-    if (!username) {
-     navigate('/login')
-    }
-  } 
-
-  useEffect(()=>{
-    BeforeRouterEnter();
-  },[])
-   return (
+  render() {
+      return (
         <Layout className='layout-collapse-demo'>
           <Sider style={{width:'auto'}}>
             <Menus></Menus>
@@ -42,8 +47,7 @@ function Root() {
             </Layout>
           </Layout>      
       );
-
-}
-
+    }
+  }
 
 export default Root;
