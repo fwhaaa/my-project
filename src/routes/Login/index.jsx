@@ -20,7 +20,10 @@ const Login = () => {
             Message.error(`登录失败,${respData.respMsg}`)
             
           }else {
-            Message.success('登录成功')
+            Message.success('登录成功');
+            const username = form.getFieldValue('username');
+            localStorage.setItem('username',username);
+            localStorage.setItem('password',respData.results[0].password);
             navigate(`/`);
           }
         })
