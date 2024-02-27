@@ -1,6 +1,6 @@
-import { Form, Input, Button, Checkbox, Radio, Grid, Card,  InputNumber } from '@arco-design/web-react';
+import { Form, Input, Button, Checkbox, Radio, Grid, Card,  InputNumber, Modal } from '@arco-design/web-react';
 import{ useEffect, useState   } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import httpServer from '../httpServer';
 
 const RadioGroup = Radio.Group;
@@ -23,6 +23,9 @@ const Marking = () => {
   const [saqScore,setSaqScore] = useState();
   const {examId,studentId,paperId} = useParams();
   const [examInfo,setExamInfo] = useState();
+  const [visible, setVisible] = useState(false);
+  const [point,setPoint] = useState();
+  const navigate =useNavigate();
 
 
 
@@ -138,18 +141,17 @@ const Marking = () => {
           }
         }
         console.log( '----------------totalScore',totalScore);
-      }  else if(studentAnswer.score !== undefined){
+      }  else if(studentAnswer?.score !== undefined){
       console.log('scorein ',studentAnswer);
         console.log('score in ',studentAnswer);
         totalScore += Number(studentAnswer?.score);
         console.log('--------------total',totalScore);
+        setPoint(totalScore)
+       
     }
   })
-      saveData({
-        studentId,
-        examId,
-        totalScore,
-      })
+
+   
 }
 
  
@@ -182,7 +184,7 @@ const Marking = () => {
            : (<span style={{ color: 'red' }}> {`${index+1}、${singleObj.stem} `}
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答错误！正确答案:  </span>{`${rightAnswer}`}</span>);
           return (     
-            <FormItem field={`single_${singleObj.id}`} label={label} style={{textAlign: 'left'}}>
+            <FormItem disabled field={`single_${singleObj.id}`} label={label} style={{textAlign: 'left'}}>
               <RadioGroup direction='vertical' >
                   <Radio value={'a'}>A、{singleObj.selectA}</Radio>
                   <Radio value={'b'}>B、{singleObj.selectB}</Radio>
@@ -232,7 +234,7 @@ const Marking = () => {
 
            return (
           
-            <FormItem field={`multiple_${multipleObj.id}`} label={label} style={{textAlign: 'left'}}>
+            <FormItem disabled field={`multiple_${multipleObj.id}`} label={label} style={{textAlign: 'left'}}>
                <CheckboxGroup direction='vertical' options={options} />
             </FormItem>
            )
@@ -253,7 +255,7 @@ const Marking = () => {
            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答错误！正确答案:  </span>{rightAnswer === 'true'? '正确' : '错误'}</span>);
            return (
           
-            <FormItem field={`judge_${judgeObj.id}`} label={label} style={{textAlign: 'left'}}>
+            <FormItem disabled field={`judge_${judgeObj.id}`} label={label} style={{textAlign: 'left'}}>
                 <RadioGroup direction='vertical' >
                     <Radio value='true'>正确</Radio>
                     <Radio value='false'>错误</Radio>
@@ -301,7 +303,13 @@ const Marking = () => {
          })
        }
      <FormItem wrapperCol={{ offset: 5 }}>
-          <Button type='primary'  onClick={handSubmit}    >提交</Button>
+          <Button type='primary'  onClick={()=>{
+            setVisible(true);
+            handSubmit();
+
+          }
+            // handSubmit()
+            }>提交</Button>
         </FormItem>
       <FormItem wrapperCol={{ offset: 5 }}>
       </FormItem>
@@ -309,6 +317,25 @@ const Marking = () => {
        
       </FormItem>
     </Form>
+          <Modal
+        title='Modal Title'
+        visible={visible}
+        onOk={()=>{ 
+           saveData({
+          studentId,
+          examId,
+          point,
+        });
+        navigate(`/score/management/paperList/${examId}`)
+        
+      }}
+        onCancel={() => setVisible(false)}
+        focusLock={true}
+      >
+        <p>
+          总分为{point}分，是否提交？
+        </p>
+      </Modal>
     </div>
 
   );

@@ -9,10 +9,11 @@ const Sider = Layout.Sider;
 const Header = Layout.Header;
 const Footer = Layout.Footer;
 const Content = Layout.Content;
-const username = localStorage.getItem('username');
+
 
 
 function Root() {
+  const username = localStorage.getItem('username');
   const navigate = useNavigate();
   const [collapsed,setCollapsed] = useState(false);
   function handleCollapsed(){

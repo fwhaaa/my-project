@@ -2,6 +2,7 @@ import { PageHeader, Avatar, Menu, Dropdown, Button, Modal, Form, Input, Message
 import { IconUser,  IconEdit,  IconDown } from '@arco-design/web-react/icon';
 import { useState } from 'react';
 import httpServer from './httpServer';
+import { useNavigate } from 'react-router-dom';
 const username = localStorage.getItem('username');
 const FormItem = Form.Item;
 
@@ -12,20 +13,18 @@ const headerStyle={
 
 const Head = () => {
   const [visible, setVisible] = useState(false);
+  const [logoutVisible, setLogoutVisible] = useState(false);
   const [form] = Form.useForm();
-  const [ isSending, setIsSending ] = useState(false);
-  const [ isSent, setIsSent ] = useState(false);
+  const navigate =useNavigate();
+
 
   const dropList = (
     <Menu>
       <Menu.Item key='1' onClick={()=>{
-
-        
         setVisible(true)
         form.setFieldValue('username',username);
-        
         }}>修改密码</Menu.Item>
-      <Menu.Item key='2'>退出登录</Menu.Item>
+      <Menu.Item key='2' onClick={()=>setLogoutVisible(true)}>退出登录</Menu.Item>
     </Menu>
   );
   
@@ -44,9 +43,17 @@ const Head = () => {
   }
 
   async function handSubmit() {
-      await saveData(form.getFieldsValue());   
-
+      await saveData(form.getFieldsValue());
+      Message.success('修改成功')
+      setVisible(false)
+      localStorage.setItem('password', form.getFieldValue('password'));
     } 
+  
+    function logout(){
+      localStorage.clear();
+      Message.normal('已退出登录')
+      navigate(`/login`)
+    }
   
 
 
@@ -60,12 +67,7 @@ const Head = () => {
     Message.warning('两次密码不一致，请重新输入')
    } else{
      handSubmit()
-
-
    }
-   
-
-
   }
 
   return (
@@ -80,7 +82,7 @@ const Head = () => {
               breadcrumbName: 'Home',
             },
             {
-              path: '/channel',
+              path: '/channel', 
               breadcrumbName: '。。。',
             },
             {
@@ -94,14 +96,13 @@ const Head = () => {
           <div  >
              <Dropdown droplist={dropList} trigger='click' >
              <Avatar
-              triggerIcon={<IconEdit />}
               style={{ backgroundColor: '#14C9C9'}}
               >
-              <IconUser />
+              {localStorage.getItem('username')}
             </Avatar>
             </Dropdown>
        <Modal
-        title='Modal Title'
+        title='修改密码'
         visible={visible}
         onOk={() =>
           update()
@@ -112,7 +113,7 @@ const Head = () => {
       >
          <Form  autoComplete='off' form={form}>
       <FormItem label='用户名' disabled field='username'>
-        <Input placeholder='please enter your username...' />
+        <Input />
       </FormItem>
       <FormItem label='新密码' field='password'>
         <Input placeholder='请输入新密码' />
@@ -122,6 +123,17 @@ const Head = () => {
       </FormItem>
     </Form>
 
+      </Modal>
+
+      <Modal
+        title='提示'
+        visible={logoutVisible}
+        onOk={() => logout()}
+        onCancel={() => setLogoutVisible(false)}
+      >
+        <p style={{textAlign:'center'}}>
+         是否要退出登录
+        </p>
       </Modal>
           </div>
         }

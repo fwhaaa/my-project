@@ -9,6 +9,7 @@ const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
 
 function Menus() {
+  const username = localStorage.getItem('username')
   const [openKeys, setOpenKeys] = useState([]);
   const [selectedKeys, setSelectedKeys] = useState([]);
   const location =useLocation();
@@ -57,23 +58,28 @@ function Menus() {
                 </Link>
 
         </SubMenu>
+        {
+          username==='root' && 
+          <SubMenu
+            key='teacher_management'
+            title={
+              <>
+                <IconUser /> 教师管理
+              </>
+            }
+          >
+                  <Link to={`teacher/management/add`}>
+                   <MenuItem key='teacher_management_add'><IconUserAdd />添加教师</MenuItem>
+                  </Link>
+                  <Link to={`teacher/management/list`}>
+                   <MenuItem key='teacher_management_list'><IconUserGroup />教师列表</MenuItem>
+                  </Link>
+  
+          </SubMenu>
 
-        <SubMenu
-          key='teacher_management'
-          title={
-            <>
-              <IconUser /> 教师管理
-            </>
-          }
-        >
-                <Link to={`teacher/management/add`}>
-                 <MenuItem key='teacher_management_add'><IconUserAdd />添加教师</MenuItem>
-                </Link>
-                <Link to={`teacher/management/list`}>
-                 <MenuItem key='teacher_management_list'><IconUserGroup />教师列表</MenuItem>
-                </Link>
 
-        </SubMenu>
+        }
+
 
         <SubMenu
           key='exam_management'
