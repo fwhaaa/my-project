@@ -1,8 +1,8 @@
 import { PageHeader, Avatar, Menu, Dropdown, Button, Modal, Form, Input, Message } from '@arco-design/web-react';
 import { IconUser,  IconEdit,  IconDown } from '@arco-design/web-react/icon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import httpServer from './httpServer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 const username = localStorage.getItem('username');
 const FormItem = Form.Item;
 
@@ -12,6 +12,85 @@ const Head = () => {
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [form] = Form.useForm();
   const navigate =useNavigate();
+  const [routes,setRoutes] = useState([]);
+
+  const location = useLocation(); 
+  const pathname = location.pathname ; 
+  console.log('--------------------pathname',pathname);
+  
+  useEffect(()=>{
+    if(pathname.includes('/score/management/marking')){
+      setRoutes([
+        {
+          // path: '/score/management',
+          breadcrumbName: '成绩管理',
+        },
+        {
+          path: '/', 
+          breadcrumbName: '科目',
+        },
+        {
+          path: '/',
+          breadcrumbName: '考试列表',
+        },
+        {
+          path: '/',
+          breadcrumbName: '试卷列表',
+        },
+        {
+          path: '/',
+          breadcrumbName: '阅卷',
+        }
+      ])
+    } else if(pathname.includes('/score/management/paperList')){
+      setRoutes([
+        {
+          // path: '/score/management',
+          breadcrumbName: '成绩管理',
+        },
+        {
+          path: '/', 
+          breadcrumbName: '科目',
+        },
+        {
+          path: '/',
+          breadcrumbName: '考试列表',
+        },
+        {
+          path: '/',
+          breadcrumbName: '试卷列表',
+        },
+      ])
+    } else if(pathname.includes('/score/management/examList')){
+      setRoutes([
+        {
+          // path: '/score/management',
+          breadcrumbName: '成绩管理',
+        },
+        {
+          path: '/', 
+          breadcrumbName: '科目',
+        },
+        {
+          path: '/',
+          breadcrumbName: '考试列表',
+        },
+      ])
+    }  else if(pathname.includes('/score/management')){
+      setRoutes([
+        {
+          // path: '/score/management',
+          breadcrumbName: '成绩管理',
+        },
+        {
+          path: '/', 
+          breadcrumbName: '科目',
+        },
+      ])
+    } else{
+      setRoutes([])
+    }
+  },[pathname])
 
 
   const dropList = (
@@ -72,20 +151,7 @@ const Head = () => {
         title='在线考试系统'
         subTitle='This is a description'
         breadcrumb={{
-          routes: [
-            // {
-            //   path: '/',
-            //   breadcrumbName: 'Home',
-            // },
-            // {
-            //   path: '/channel', 
-            //   breadcrumbName: '。。。',
-            // },
-            // {
-            //   path: '/',
-            //   breadcrumbName: '。。。',
-            // },
-          ],
+          routes,
         }}
         extra={
           
