@@ -6,6 +6,7 @@ import { AutoComplete } from '@arco-design/web-react';
 import httpServer from '../httpServer';
 
 
+
 const FormItem = Form.Item;
   const StudentAdd = () => {
 
@@ -64,7 +65,7 @@ const FormItem = Form.Item;
         setIsSent(false);
       }
   return (
-    <div>
+    <div className='form-wrapper'>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
       {/* <FormItem field={'id'}  disabled={isSending} label='学号'  
       rules={[{ required: true },   

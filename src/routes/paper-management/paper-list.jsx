@@ -124,9 +124,6 @@ function PaperList() {
          } type='primary' status='danger'  >
           删除
         </Button> 
-        <Button>
-          
-          </Button> 
         </div>
       ),
     },

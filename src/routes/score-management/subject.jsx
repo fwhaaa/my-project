@@ -16,10 +16,11 @@ const Subject = () => {
             }}
           >
               <Card
-                    className='card-demo-in-grid'
+                    style={{margin:'12px',background:'pink',borderRadius:'4px'}}
                     title='科目'
                     extra={<Link  to={`/score/management/examList/${value}`}>查看</Link>}
                     bordered={false}
+                
                   >
                     {value}
                   </Card>

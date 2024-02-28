@@ -4,6 +4,7 @@ import Menus from './menus';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { PageHeader, Radio } from '@arco-design/web-react';
 import Head from './header';
+import './common.css'
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -39,7 +40,7 @@ function Root() {
             <Header>
               <Head></Head>
             </Header>
-              <Content><Outlet /></Content>
+              <Content style={{padding:'20px'}}><Outlet /></Content>
             </Layout>
           </Layout>      
       );

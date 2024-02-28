@@ -52,7 +52,7 @@ const FormItem = Form.Item;
   }
 
   return (
-    <div>
+    <div >
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
 
       <FormItem field={'subject'}  disabled={isSending} label='科目' rules={[{ required: true }]} >

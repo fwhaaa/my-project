@@ -6,10 +6,6 @@ import { useNavigate } from 'react-router-dom';
 const username = localStorage.getItem('username');
 const FormItem = Form.Item;
 
-const headerStyle={
-
-   padding: '1px', 
-}
 
 const Head = () => {
   const [visible, setVisible] = useState(false);
@@ -71,24 +67,24 @@ const Head = () => {
   }
 
   return (
-    <div style={ headerStyle }>
+    <div >
       <PageHeader
         title='在线考试系统'
         subTitle='This is a description'
         breadcrumb={{
           routes: [
-            {
-              path: '/',
-              breadcrumbName: 'Home',
-            },
-            {
-              path: '/channel', 
-              breadcrumbName: '。。。',
-            },
-            {
-              path: '/',
-              breadcrumbName: '。。。',
-            },
+            // {
+            //   path: '/',
+            //   breadcrumbName: 'Home',
+            // },
+            // {
+            //   path: '/channel', 
+            //   breadcrumbName: '。。。',
+            // },
+            // {
+            //   path: '/',
+            //   breadcrumbName: '。。。',
+            // },
           ],
         }}
         extra={

@@ -61,7 +61,7 @@ const FormItem = Form.Item;
     setIsSent(false);
   }
   return (
-    <div>
+    <div className='form-wrapper'>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>
         <FormItem field={'teachername'}  disabled={isSending} label='姓名'  rules={[{ required: true }]}>
           <Input placeholder='输入教师姓名' />

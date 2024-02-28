@@ -12,7 +12,7 @@ const  PaperAdd = () => {
 
 
   return (
-    <div>
+    <div className='form-wrapper'>
    {   hasClickButton 
       ? 
       <PaperAddQuestion metaInfo={metaInfo} setMetaInfo={setMetaInfo}></PaperAddQuestion>
