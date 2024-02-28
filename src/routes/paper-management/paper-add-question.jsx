@@ -54,7 +54,7 @@ function  PaperAddQuestion(props) {
     }
 
   return (
-    <div>
+    <div  >
       <Tabs>
       <TabPane key='SingleChoice' title='单选题'>
         <SingleList metaInfo={metaInfo} setMetainfo={setMetainfo} questionList={questionList} setQuestionList={setQuestionList}></SingleList>    

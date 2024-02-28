@@ -11,7 +11,7 @@ const PaperMetaInfo = (props) => {
     const Option = Select.Option;
 
     return (
-    <div>
+    <div  className='form-wrapper'>
         <Form form={form} style={ { width: 600 }} autoComplete='off' >
         <FormItem label='试卷科目' field='subject' rules={[{ required: true }]}>
         <Select
