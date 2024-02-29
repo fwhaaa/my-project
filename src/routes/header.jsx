@@ -22,68 +22,68 @@ const Head = () => {
     if(pathname.includes('/score/management/marking')){
       setRoutes([
         {
-          // path: '/score/management',
+          path: '/score/management',
           breadcrumbName: '成绩管理',
         },
         {
-          path: '/', 
+          path: '/score/management/subject', 
           breadcrumbName: '科目',
         },
         {
-          path: '/',
+          path: '/score/management/examList',
           breadcrumbName: '考试列表',
         },
         {
-          path: '/',
+          path: '/score/management/paperList',
           breadcrumbName: '试卷列表',
         },
         {
-          path: '/',
+          path: '/score/management/marking',
           breadcrumbName: '阅卷',
         }
       ])
     } else if(pathname.includes('/score/management/paperList')){
       setRoutes([
         {
-          // path: '/score/management',
+          path: '/score/management',
           breadcrumbName: '成绩管理',
         },
         {
-          path: '/', 
+          path: '/score/management/subject', 
           breadcrumbName: '科目',
         },
         {
-          path: '/',
+          path: '/score/management/examList',
           breadcrumbName: '考试列表',
         },
         {
-          path: '/',
+          path: '/score/management/paperList',
           breadcrumbName: '试卷列表',
         },
       ])
     } else if(pathname.includes('/score/management/examList')){
       setRoutes([
         {
-          // path: '/score/management',
+          path: '/score/management',
           breadcrumbName: '成绩管理',
         },
         {
-          path: '/', 
+          path: '/score/management/subject', 
           breadcrumbName: '科目',
         },
         {
-          path: '/',
+          path: '/score/management/examList',
           breadcrumbName: '考试列表',
         },
       ])
     }  else if(pathname.includes('/score/management')){
       setRoutes([
         {
-          // path: '/score/management',
+          path: '/score/management',
           breadcrumbName: '成绩管理',
         },
         {
-          path: '/', 
+          path: '/score/management/subject', 
           breadcrumbName: '科目',
         },
       ])
@@ -152,6 +152,19 @@ const Head = () => {
         subTitle='This is a description'
         breadcrumb={{
           routes,
+          itemRender: (route,routes,path)=>{
+           console.log('------------route',route);
+           console.log('------------routes',routes);
+           console.log('------------path',path);
+           return(
+            <div onClick={()=>{
+              // navigate(path)
+            }}> 
+             {route.breadcrumbName}
+         
+              </div>
+           )
+          }
         }}
         extra={
           
