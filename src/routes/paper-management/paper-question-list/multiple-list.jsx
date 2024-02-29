@@ -117,18 +117,34 @@ function MultipleList(props){
       console.log('formdata',form.getFieldsValue());
       console.log('currentrecord',currentRecord);
       const rightAnswer = (form.getFieldsValue()).rightAnswer
-      setQuestionList([...questionList,{
-        questionId: currentRecord.id,
-        ...currentRecord,
-        rightAnswer: rightAnswer.join(','),
-        type: 'multiple',
-      }])
+      // setQuestionList([...questionList,{
+      //   questionId: currentRecord.id,
+      //   ...currentRecord,
+      //   rightAnswer: rightAnswer.join(','),
+      //   type: 'multiple',
+      // }])
       
-      setTimeout(() => {
-        Message.success('Success !');
-        setEditVisible(false);
-        setConfirmLoading(false);
-      }, 1500);
+      // setTimeout(() => {
+      //   Message.success('Success !');
+      //   setEditVisible(false);
+      //   setConfirmLoading(false);
+      // }, 1500);
+      if( questionList?.some((v)=> v.type === 'multiple' && v.questionId ===  currentRecord.id)){
+        Message.warning('该题目已存在')
+        setConfirmLoading(false)
+      } else {
+        setQuestionList([...questionList,{
+          questionId: currentRecord.id,
+          ...currentRecord,
+          rightAnswer: rightAnswer,
+          type: 'multiple',
+        }]);
+        setTimeout(() => {
+          Message.success('Success !');
+          setEditVisible(false);
+          setConfirmLoading(false);
+        }, 1500);
+      }
     })
   }
   

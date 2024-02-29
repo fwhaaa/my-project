@@ -99,8 +99,7 @@ function SingleList(props) {
       const rightAnswer = (form.getFieldsValue()).rightAnswer
       console.log('rightanswer',rightAnswer);
       // if(questionList.map())
-      const isexist = questionList?.some((v)=> v.type === 'single' && v.questionId ===  currentRecord.id)
-
+      // const isexist = questionList?.some((v)=> v.type === 'single' && v.questionId ===  currentRecord.id)
       if( questionList?.some((v)=> v.type === 'single' && v.questionId ===  currentRecord.id)){
         Message.warning('该题目已存在')
         setConfirmLoading(false)
@@ -118,7 +117,7 @@ function SingleList(props) {
         }, 1500);
       }
       
-      console.log('----------------isexist',isexist);
+      // console.log('----------------isexist',isexist);
 
       
      

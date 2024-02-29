@@ -87,18 +87,35 @@ function SaqList(props) {
       console.log('currentrecord',currentRecord);
       const rightAnswer = (form.getFieldsValue()).rightAnswer
       console.log('rightanswer',rightAnswer);
-      setQuestionList([...questionList,{
-        questionId: currentRecord.id,
-        ...currentRecord,
-        rightAnswer: rightAnswer,
-        type: 'saq',
-      }])
+      // setQuestionList([...questionList,{
+      //   questionId: currentRecord.id,
+      //   ...currentRecord,
+      //   rightAnswer: rightAnswer,
+      //   type: 'saq',
+      // }])
       
-      setTimeout(() => {
-        Message.success('Success !');
-        setEditVisible(false);
-        setConfirmLoading(false);
-      }, 1500);
+      // setTimeout(() => {
+      //   Message.success('Success !');
+      //   setEditVisible(false);
+      //   setConfirmLoading(false);
+      // }, 1500);
+      if( questionList?.some((v)=> v.type === 'saq' && v.questionId ===  currentRecord.id)){
+        Message.warning('该题目已存在')
+        setConfirmLoading(false)
+      } else {
+        setQuestionList([...questionList,{
+          questionId: currentRecord.id,
+          ...currentRecord,
+          rightAnswer: rightAnswer,
+          type: 'saq',
+        }]);
+        setTimeout(() => {
+          Message.success('Success !');
+          setEditVisible(false);
+          setConfirmLoading(false);
+        }, 1500);
+      }
+      
     })
   }return (
     <div>

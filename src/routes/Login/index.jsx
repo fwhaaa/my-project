@@ -13,6 +13,7 @@ const Login = () => {
       const username = localStorage.getItem("username");
       if (username) {
        navigate('/')
+      //  Message.normal('您已经登陆过了')
       }
     } 
   
