@@ -1,58 +1,17 @@
 import { useState } from 'react';
 import { Form, Input, Button, Message, Select} from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
-
 import httpServer from '../../httpServer';
+import useAddForm from '../../../global-hooks/use-add-form-hook';
 const options = ['math', 'english'];
 const Option = Select.Option;
 const FormItem = Form.Item;
   const  MultipleAdd = () => {
-  const [ isSending, setIsSending ] = useState(false);
-  const [ isSent, setIsSent ] = useState(false);
+  // const [ isSending, setIsSending ] = useState(false);
+  // const [ isSent, setIsSent ] = useState(false);
   const [ form ] =Form.useForm();
-    function sendData(data) {
-        return new Promise(resolve =>{
-          setTimeout(resolve,2000);
-        });
-      }
-    
-    async function saveData(data){
-      httpServer({
-        url: '/question/addQuestion/multipleChoice',
-      }, JSON.parse(data))
-      .then((res) => {
-        let respData = res.data;
-      })
-      .catch((err) => {
-        console.log('err',err);
-      })
-    }
+  const {isSending,handSubmit} = useAddForm({form,url:'/question/addQuestion/multipleChoice'})
 
- 
-
-    async function handSubmit() {
-      try {
-        Message.loading({
-          id: 'question_add',
-          content: '正在添加' 
-          });
-        setIsSending(true);
-        await saveData(JSON.stringify(form.getFieldsValue()));   
-        await sendData(JSON.stringify(form.getFieldsValue()));
-        setIsSending(false);
-        setIsSent(true);
-      } catch (e) {
-        Message.error('校验失败');
-        console.log(e);
-      }
-    }
-    if (isSent) {
-      Message.success({
-        id: 'question_add',
-        content: '添加成功!',
-      })
-      setIsSent(false);
-    }
   return (
     <div>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', minWidth:'280px'  }} autoComplete='off'>
