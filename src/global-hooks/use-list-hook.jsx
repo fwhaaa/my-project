@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Table, Button, Input, Modal, Select, Form, Message  } from '@arco-design/web-react';
+import {  Message  } from '@arco-design/web-react';
 import httpServer from '../routes/httpServer';
 
 function useList({
     getListUrl,
     deleteUrl,
     editUrl,
-    form
+    form,
+    setVisible,
+    setConfirmLoading,
+    setDeleteVisible
 }) {
     console.log(editUrl);
-    
-const [visible, setVisible] = useState(false);
-const [editVisible, setEditVisible] = useState(false);
-const [confirmLoading, setConfirmLoading] = useState(false);
 const [data, setData] = useState();
   async function getList() {
     httpServer({
@@ -66,7 +65,7 @@ const [data, setData] = useState();
     await deleteList(item);
        setTimeout(() => {
         Message.success('删除成功');
-        setVisible(false);
+        setDeleteVisible(false);
         setConfirmLoading(false);
       }, 1500);
   }
@@ -91,12 +90,6 @@ const [data, setData] = useState();
     data,
     deleteRecord,
     edit,
-    editVisible,
-    confirmLoading,
-    visible,
-    setConfirmLoading,
-    setEditVisible,
-    setVisible
   };
 }
 export default useList;

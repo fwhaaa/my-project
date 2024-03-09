@@ -1,24 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Table, Button, Input, Modal, Select, Form, Message  } from '@arco-design/web-react';
-// import httpServer from '../httpServer';
+import { useState } from 'react';
+import { Table, Button, Input, Select, Form } from '@arco-design/web-react';
 import useList from '../../global-hooks/use-list-hook';
+import CommonModal from '../../global-hooks/use-modal-hook';
 
 
 const FormItem = Form.Item;
 function TeachertList() {
-
-  // const [data, setData] = useState();
-  // const [visible, setVisible] = useState(false);
-  // const [editVisible, setEditVisible] = useState(false);
-  // const [confirmLoading, setConfirmLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
   const [searchType,setSearchType] = useState('teachername');
   const [form] = Form.useForm();
-  const {data,deleteRecord,edit,editVisible,confirmLoading,setEditVisible,visible,setVisible} = useList({
+  const {data,deleteRecord,edit} = useList({
     getListUrl:'/teacher/teacherManagement/list',
     deleteUrl:'/teacher/teacherManagement/delete',
     editUrl: '/teacher/teacherManagement/edit',
-    form
+    form,
+    visible,
+    setVisible,
+    setConfirmLoading,
+    setDeleteVisible
   })
   const formItemLayout = {
     labelCol: {
@@ -30,58 +32,6 @@ function TeachertList() {
   };
 
 
-  // async function getList() {
-  //   httpServer({
-  //     url: '/teacher/teacherManagement/list',
-  //     method: 'GET'
-  //   })
-  //   .then((res) => {
-  //     console.log('----res',res);
-  //     let respData = res.data;
-  //     if(res.status ===200 && respData.respCode ===1 ) {
-  //       setData(res.data.results);
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log('err',err);
-  //   })
-  // }
-
-  // async function deleteList(data){
-  //   httpServer({
-  //     url: '/teacher/teacherManagement/delete',
-  //   }, data )
-  //   .then(async (res) => {
-  //     let respData = res.data;
-  //     await getList();
-
-  //   })
-  //   .catch((err) => {
-  //     console.log('err',err);
-  //   })
-  // }
-
-  // async function editList(data) {
-
-  //   httpServer({
-  //     url: '/teacher/teacherManagement/edit',
-  //   },JSON.parse(data))
-  //   .then(async (res) => {
-  //     let respData = res.data;
-  //     await getList();
-
-  //   })
-  //   .catch((err) => {
-  //     console.log('err',err);
-  //   })
-  // }
-
-
-  
-  // useEffect(()=>{
-  //   getList();
-  // },[])
-  
 
   const columns = [
     {
@@ -98,25 +48,25 @@ function TeachertList() {
       dataIndex: 'address',
     },
     {
-      title: 'Email',
+      title: '邮箱',
       dataIndex: 'email',
     },
     {
-      title: 'Operation',
+      title: '操作',
       dataIndex: 'op',
       render: (_, record) => (
         <div>
         <Button onClick={() =>{
         setCurrentRecord(record)
         form.setFieldsValue(record)
-        setEditVisible(true)
+        setVisible(true)
       } 
        } type='primary' status='default'  >
         修改
       </Button> 
       <Button onClick={() =>{
         setCurrentRecord(record)
-        setVisible(true)
+        setDeleteVisible(true)
       } 
        } type='primary' status='danger'  >
         删除
@@ -125,34 +75,6 @@ function TeachertList() {
       ),
     },
   ];
-  
-  
-//   async function handleSearch(search){
-//     if(searchType === 'StudentName'){
-//     setData(data.filter(t => t.teachername.includes(search)));
-//     }
-//     if(searchType === 'id'){
-//       setData(data.filter(t => t.id.includes(search)));
-//   }
-// }
-  // async function deleteTeacher(item){
-  //   await deleteList(item);
-  //   setVisible(false);
-  // }
-
-  // async function editTeacher(){
-  //   form.validate().then(async () => {
-  //     setConfirmLoading(true);
-  //     await editList(JSON.stringify(form.getFieldsValue()));  
-  //     setTimeout(() => {
-  //       Message.success('Success !');
-  //       setEditVisible(false);
-  //       setConfirmLoading(false);
-  //     }, 1500);
-  //   })
-  // }
-
-
 
   return (
     <div>
@@ -170,14 +92,8 @@ function TeachertList() {
      columns={columns}
      data={data}
    />
-     <Modal
-     title='修改'
-     visible={editVisible}
-     onOk={edit}
-     confirmLoading={confirmLoading}
-     onCancel={() => setEditVisible(false)}
-   >
-     <Form
+   <CommonModal type='edit' setVisible={setVisible} visible={visible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={edit}> 
+    <Form
        {...formItemLayout}
        form={form}
        labelCol={{
@@ -200,24 +116,14 @@ function TeachertList() {
        <Input placeholder='' />
        </FormItem>
      </Form>
-   </Modal>
-    <Modal
-       title='删除'
-       visible={visible}
-       onOk={() =>
+     </CommonModal>
+     <CommonModal type='delete' setVisible={setDeleteVisible} visible={deleteVisible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={() =>
        { 
          deleteRecord(currentRecord)
        }
-         }
-       onCancel={() => setVisible(false)}
-       autoFocus={false}
-       focusLock={true}
-       confirmLoading={confirmLoading}
-      >
-       <p>
-         确认删除学生?
-       </p>
-     </Modal>
+       } >
+
+     </CommonModal>
  </div>
   );
 }
