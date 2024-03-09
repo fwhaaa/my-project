@@ -89,9 +89,10 @@ function SaqList(props) {
       console.log('rightanswer',rightAnswer);
       // setQuestionList([...questionList,{
       //   questionId: currentRecord.id,
-      //   ...currentRecord,
+      //   ...currentRecord,  
       //   rightAnswer: rightAnswer,
-      //   type: 'saq',
+      //   typ  -3
+      // e: 'saq',
       // }])
       
       // setTimeout(() => {

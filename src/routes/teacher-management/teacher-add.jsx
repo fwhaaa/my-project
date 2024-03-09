@@ -1,65 +1,24 @@
 import { useState, useContext } from 'react';
-import { Form, Input, Button, Message,} from '@arco-design/web-react';
+import { Form, Input, Button} from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import { AutoComplete } from '@arco-design/web-react';
-import httpServer from '../httpServer';
+import useAddForm from '../../global-hooks/use-add-form-hook';
 const FormItem = Form.Item;
-  const TeacherAdd = () => {
-  const [ isSending, setIsSending ] = useState(false);
-  const [ isSent, setIsSent ] = useState(false);
+
+const TeacherAdd = () => {
   const [ form ] =Form.useForm();
+  const {isSending,handSubmit} = useAddForm({form,url:'/teacher/teacherManagement/add'})
+  const [email, setEmail] = useState([]);
+  const handleSearch = (inputValue) => {
+    const mail=[
+      '@qq.com',
+      '@163.com',
+      '@gmail.com',
+      '@xxx.com'
+    ];
+    setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
+  }
 
-  async function saveData(data){
-    httpServer({
-      url: '/teacher/teacherManagement/add',
-    }, JSON.parse(data))
-    .then((res) => {
-      let respData = res.data;
-
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-    function sendData(data) {
-        return new Promise(resolve =>{
-          setTimeout(resolve,2000);
-        });
-      }
-      const [email, setEmail] = useState([]);
-      const handleSearch = (inputValue) => {
-        const mail=[
-          '@qq.com',
-          '@163.com',
-          '@gmail.com',
-          '@xxx.com'
-        ];
-        setEmail(inputValue ? mail.map((v) => `${inputValue}${v}`) : []);
-      }
-  async function handSubmit() {
-    try {
-      await form.validate();
-      Message.loading({
-        id: 'teacher_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await saveData(JSON.stringify(form.getFieldsValue()))
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
-    }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'teacher_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
   return (
     <div className='form-wrapper'>
       <Form form={form} style={{ maxWidth:'600px' , padding: '20px', paddingTop: '80px', minWidth:'280px'  }} autoComplete='off'>

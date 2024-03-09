@@ -2,62 +2,16 @@ import { useEffect, useState } from 'react';
 import { Form, Input, Button, Message, Select, InputNumber } from '@arco-design/web-react';
 import { IconPlus } from  '@arco-design/web-react/icon';
 import httpServer from '../httpServer';
+import useAddForm from '../../global-hooks/use-add-form-hook';
 const FormItem = Form.Item;
   const ExamAdd = () => {
-  const [ isSending, setIsSending ] = useState(false);
-  const [ isSent, setIsSent ] = useState(false);
   const [ options, setOptions ] = useState([]);
   const [ form ] =Form.useForm();
-  const [ data, setData] = useState();
   const [ subject , setSubject] =useState();
   const subjectOptions = ['math', 'english'];
-
+  const {isSending,handSubmit} = useAddForm({form,url:'/exam/examManagement/add'})
   const Option = Select.Option; 
 
-  async function saveData(data){
-    httpServer({
-      url: '/exam/examManagement/add',
-    }, JSON.parse(data))
-    .then((res) => {
-      let respData = res.data;
-
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-    function sendData(data) {
-        return new Promise(resolve =>{
-          setTimeout(resolve,2000);
-        });
-      }
-
-
-
-  async function handSubmit() {
-    try {
-      await form.validate();
-      Message.loading({
-        id: 'exam_add',
-        content: '正在添加' 
-        });
-      setIsSending(true);
-      await saveData(JSON.stringify(form.getFieldsValue()))
-      await sendData(JSON.stringify(form.getFieldsValue()));
-      setIsSending(false);
-      setIsSent(true);
-    } catch (e) {
-      Message.error('校验失败');
-      console.log(e);
-    }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'exam_add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
-  }
 
   async function getList(subject) {
     httpServer({
@@ -76,7 +30,6 @@ const FormItem = Form.Item;
         });
         console.log('paperOptions',paperOptions);
         setOptions(paperOptions);
-        setData(res.data.results);
       }
     })
     .catch((err) => {
@@ -87,14 +40,6 @@ const FormItem = Form.Item;
   useEffect(()=>{
      getList(subject);
   },[subject])
-
-  console.log(data);
-
- 
-
-
-
-
   
   return (
     <div>
@@ -103,7 +48,7 @@ const FormItem = Form.Item;
           <Input placeholder='输入考试名称' />
         </FormItem>
        <FormItem field={'subject'}  disabled={isSending} label='科目' rules={[{ required: true }]} >
-        <Select placeholder='Please select' onChange={(value,options)=>{
+        <Select placeholder='Please select' onChange={(value)=>{
           setSubject(value);
         }}>
         {subjectOptions.map((option) => (
