@@ -108,7 +108,9 @@ console.log('httpDefaultOpts',httpDefaultOpts);
 
 
   let promise = new Promise(function(resolve, reject) {
+    console.log(httpDefaultOpts);
     axios(httpDefaultOpts).then((res) => {
+
       successState(res)
       resolve(res)
     }).catch((response) => {
