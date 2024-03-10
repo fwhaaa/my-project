@@ -10,7 +10,7 @@ function CommonModal({onOk,type,handleOk,children,setConfirmLoading,confirmLoadi
         confirmLoading={confirmLoading}
         onCancel={() => setVisible(false)}
    >
-    { type==='edit' ? children :  <p> 确认删除学生?</p> }
+    { type==='edit' ? children :  <p> 确认删除?</p> }
 
    </Modal>
 

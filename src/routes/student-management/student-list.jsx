@@ -1,16 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Select, Form, Message  } from '@arco-design/web-react';
 import httpServer from '../httpServer';
+import useList from '../../global-hooks/use-list-hook';
+import CommonModal from '../../global-hooks/use-modal-hook';
 
 const FormItem = Form.Item;
 function StudentList() {
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
+  const [deleteVisible, setDeleteVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [editVisible, setEditVisible] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
   const [searchType,setSearchType] = useState('StudentName');
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+  const {data,deleteRecord,edit} = useList({
+    getListUrl:'/teacher/studentManagement/list',
+    deleteUrl:'/teacher/studentManagement/delete',
+    editUrl: '/teacher/studentManagement/edit',
+    form,
+    visible,
+    setVisible,
+    setConfirmLoading,
+    setDeleteVisible
+  })
   const formItemLayout = {
     labelCol: {
       span: 4,
@@ -19,58 +31,8 @@ function StudentList() {
       span: 20,
     },
   };
-  async function getList() {
-    httpServer({
-      url: '/teacher/studentManagement/list',
-      method: 'GET'
-    })
-    .then((res) => {
-      console.log('----res',res);
-      let respData = res.data;
-      if(res.status ===200 && respData.respCode ===1 ) {
-        setData(res.data.results);
-      }
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-
-  async function deleteList(data){
-    httpServer({
-      url: '/teacher/studentManagement/delete',
-    }, data )
-    .then(async (res) => {
-      let respData = res.data;
-      await getList();
-
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-
-  async function editList(data) {
-
-    httpServer({
-      url: '/teacher/studentManagement/edit',
-    },JSON.parse(data))
-    .then(async (res) => {
-      let respData = res.data;
-      await getList();
-
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
 
 
-  
-  useEffect(()=>{
-    getList();
-  },[])
-  
   const columns = [
   
     {
@@ -98,14 +60,14 @@ function StudentList() {
           <Button onClick={() =>{
           setCurrentRecord(record)
           form.setFieldsValue(record)
-          setEditVisible(true)
+          setVisible(true)
         } 
          } type='primary' status='default'  >
           修改
         </Button> 
         <Button onClick={() =>{
           setCurrentRecord(record)
-          setVisible(true)
+          setDeleteVisible(true)
         } 
          } type='primary' status='danger'  >
           删除
@@ -124,22 +86,6 @@ function StudentList() {
 //       setData(data.filter(t => t.id.includes(search)));
 //   }
 // }
-  async function deleteStudent(item){
-    await deleteList(item);
-    setVisible(false);
-  }
-
-  async function editStudent(){
-    form.validate().then(async () => {
-      setConfirmLoading(true);
-      await editList(JSON.stringify(form.getFieldsValue()));  
-      setTimeout(() => {
-        Message.success('Success !');
-        setEditVisible(false);
-        setConfirmLoading(false);
-      }, 1500);
-    })
-  }
 
 
 
@@ -162,55 +108,39 @@ function StudentList() {
         columns={columns}
         data={data}
       />
-        <Modal
-        title='修改'
-        visible={editVisible}
-        onOk={() => {
-          editStudent();
-        }}
-        confirmLoading={confirmLoading}
-        onCancel={() => setEditVisible(false)}
-      >
-        <Form
-          {...formItemLayout}
-          form={form}
-          labelCol={{
-            style: { flexBasis: 90 },
-          }}
-          wrapperCol={{
-            style: { flexBasis: 'calc(100% - 90px)' },
-          }}
-        >    
-          <FormItem label='学号' field='id' disabled rules={[{ required: true }]}>
-            <Input placeholder='' />
-          </FormItem>
-            <FormItem label='姓名' field='studentname' rules={[{ required: true }]}>
-            <Input placeholder='' />
-          </FormItem>
-          <FormItem label='地址' required field='address' rules={[{ required: true }]}>
-          <Input placeholder='' />
-          </FormItem>
-          <FormItem label='邮箱' required field='email' rules={[{ required: true }]}>
-          <Input placeholder='' />
-          </FormItem>
-        </Form>
-      </Modal>
-       <Modal
-          title='删除'
-          visible={visible}
-          onOk={() =>
-          {        
-            deleteStudent(currentRecord)
-          }
-            }
-          onCancel={() => setVisible(false)}
-          autoFocus={false}
-          focusLock={true}
-         >
-          <p>
-            确认删除学生?
-          </p>
-        </Modal>
+         <CommonModal type='edit' setVisible={setVisible} visible={visible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={edit}> 
+    <Form
+       {...formItemLayout}
+       form={form}
+       labelCol={{
+         style: { flexBasis: 90 },
+       }}
+       wrapperCol={{
+         style: { flexBasis: 'calc(100% - 90px)' },
+       }}
+     >    
+       <FormItem label='学生编号' field='id' disabled rules={[{ required: true }]}>
+         <Input placeholder='' />
+       </FormItem>
+         <FormItem label='姓名' field='studentname' rules={[{ required: true }]}>
+         <Input placeholder='' />
+       </FormItem>
+       <FormItem label='地址' required field='address' rules={[{ required: true }]}>
+       <Input placeholder='' />
+       </FormItem>
+       <FormItem label='邮箱' required field='email' rules={[{ required: true }]}>
+       <Input placeholder='' />
+       </FormItem>
+     </Form>
+     </CommonModal>
+     <CommonModal type='delete' setVisible={setDeleteVisible} visible={deleteVisible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={() =>
+       { 
+         deleteRecord(currentRecord)
+       }
+       } >
+
+     </CommonModal>
+
     </div>
   );
 

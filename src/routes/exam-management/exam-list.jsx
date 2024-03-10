@@ -1,21 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Select, Form, Message, InputNumber } from '@arco-design/web-react';
 import httpServer from '../httpServer';
+import useList from '../../global-hooks/use-list-hook';
+import CommonModal from '../../global-hooks/use-modal-hook';
 
 
 const FormItem = Form.Item;
 function ExamList() {
 
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
   const [visible, setVisible] = useState(false);
-  const [editVisible, setEditVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
   const [form] = Form.useForm();
   const subjectOptions = ['math', 'english'];
   const Option = Select.Option; 
   const [ options, setOptions ] = useState([]);
-  const [ subject , setSubject] =useState();
+  const {data,deleteRecord,edit} = useList({
+    getListUrl:'/exam/examManagement/list',
+    deleteUrl:'/exam/examManagement/delete',
+    editUrl: '/exam/examManagement/edit',
+    form,
+    visible,
+    setVisible,
+    setConfirmLoading,
+    setDeleteVisible
+  })
 
   const formItemLayout = {
     labelCol: {
@@ -27,87 +38,6 @@ function ExamList() {
   };
 
 
-  async function getList() {
-    httpServer({
-      url: '/exam/examManagement/list',
-      method: 'GET'
-    })
-    .then((res) => {
-      console.log('----res',res);
-      let respData = res.data;
-      if(res.status ===200 && respData.respCode ===1 ) {
-        setData(res.data.results);
-      }
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-
-  async function deleteExam(data){
-    httpServer({
-      url: '/exam/examManagement/delete',
-    }, data )
-    .then(async (res) => {
-      let respData = res.data;
-      await getList();
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-
-  async function editExam(data) {
-
-    httpServer({
-      url: '/exam/examManagement/edit',
-    },JSON.parse(data))
-    .then(async (res) => {
-      let respData = res.data;
-      await getList();
-
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-
-  async function getPaperList(subject) {
-    httpServer({
-      url: `/exam/examManagement/paper?subject=${subject}`,
-      method: 'GET'
-    })
-    .then((res) => {
-      console.log('----res',res);
-      const paperOptions =[];
-      if(res.status ===200 && res.data.respCode ===1 ) {
-        res.data.results.forEach(v=>{
-          paperOptions.push({
-            label: v.papername,
-            value: v.id,
-          })
-        });
-        console.log('paperOptions',paperOptions);
-        setOptions(paperOptions);
-        setData(res.data.results);
-      }
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-    
-  }
-
-
-  
-  useEffect(()=>{
-    getList();
-  },[])
-
-//   useEffect(()=>{
-//     getPaperList(subject);
-//  },[subject])
-  
 
   const columns = [
     {
@@ -132,47 +62,31 @@ function ExamList() {
         dataIndex: 'paperId',
       },
     {
-      title: 'Operation',
+      title: '操作',
       dataIndex: 'op',
       render: (_, record) => (
         <div>
         <Button onClick={() =>{
         setCurrentRecord(record)
         form.setFieldsValue(record)
-        setEditVisible(true)
+        setVisible(true)
       } 
        } type='primary' status='default'  >
         修改
       </Button> 
-      <Button onClick={() =>{
+      {/* <Button onClick={() =>{
         setCurrentRecord(record)
-        setVisible(true)
+        setDeleteVisible(true)
       } 
        } type='primary' status='danger'  >
         删除
-      </Button>  
+      </Button>   */}
       </div>
       ),
     },
   ];
   
 
-  async function deleteExamList(item){
-    await deleteExam(item);
-    setVisible(false);
-  }
-
-  async function editExamList(){
-    form.validate().then(async () => {
-      setConfirmLoading(true);
-      await editExam(JSON.stringify(form.getFieldsValue()));  
-      setTimeout(() => {
-        Message.success('Success !');
-        setEditVisible(false);
-        setConfirmLoading(false);
-      }, 1500);
-    })
-  }
 
 
 
@@ -183,16 +97,8 @@ function ExamList() {
      columns={columns}
      data={data}
    />
-     <Modal
-     title='修改'
-     visible={editVisible}
-     onOk={() => {
-       editExamList();
-     }}
-     confirmLoading={confirmLoading}
-     onCancel={() => setEditVisible(false)}
-   >
-     <Form
+        <CommonModal type='edit' setVisible={setVisible} visible={visible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={edit}> 
+        <Form
        {...formItemLayout}
        form={form}
        labelCol={{
@@ -232,23 +138,14 @@ function ExamList() {
         </Select>
         </FormItem>
      </Form>
-   </Modal>
-    <Modal
-       title='删除'
-       visible={visible}
-       onOk={() =>
-       {        
-         deleteExamList(currentRecord)
+     </CommonModal>
+       {/* <CommonModal type='delete' setVisible={setDeleteVisible} visible={deleteVisible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={() =>
+       { 
+         deleteRecord(currentRecord)
        }
-         }
-       onCancel={() => setVisible(false)}
-       autoFocus={false}
-       focusLock={true}
-      >
-       <p>
-         确认删除考试?
-       </p>
-     </Modal>
+       } >
+
+     </CommonModal> */}
  </div>
   );
 }
