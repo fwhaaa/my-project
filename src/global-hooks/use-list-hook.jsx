@@ -10,10 +10,8 @@ function useList({
     setVisible,
     setConfirmLoading,
     setDeleteVisible,
-    // setData
 }) {
-    console.log(editUrl);
-const [data, setData] = useState();
+  const [data, setData] = useState();
   async function getList() {
     httpServer({
       url: getListUrl,
@@ -30,24 +28,12 @@ const [data, setData] = useState();
       console.log('err',err);
     })
   }
-  async function deleteList(data){
-    httpServer({
-      url: deleteUrl,
-    }, data )
-    .then(async (res) => {
-      let respData = res.data;
-      await getList();
 
-    })
-    .catch((err) => {
-      console.log('err',err);
-    })
-  }
-  async function editList(data) {
+  async function updateList(data,url) {
     console.log(editUrl);
     httpServer({
-      url: editUrl
-    },JSON.parse(data))
+      url,
+    },data)
     .then(async (res) => {
       let respData = res.data;
       await getList();
@@ -56,6 +42,10 @@ const [data, setData] = useState();
       console.log('err',err);
     })
   }
+
+
+
+
   useEffect(()=>{
     getList();
   },[])
@@ -63,7 +53,7 @@ const [data, setData] = useState();
 
   async function deleteRecord(item){
     setConfirmLoading(true);
-    await deleteList(item);
+    await updateList(item,deleteUrl);
        setTimeout(() => {
         Message.success('删除成功');
         setDeleteVisible(false);
@@ -76,7 +66,7 @@ const [data, setData] = useState();
     form.validate().then(async () => {
       console.log(JSON.stringify(form.getFieldsValue()));
       setConfirmLoading(true);
-      await editList(JSON.stringify(form.getFieldsValue()));  
+      await updateList(form.getFieldsValue(),editUrl);  
       setTimeout(() => {
         Message.success('编辑成功');
         setVisible(false)
