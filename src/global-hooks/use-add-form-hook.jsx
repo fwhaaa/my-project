@@ -3,9 +3,7 @@ import {  Message  } from '@arco-design/web-react';
 import httpServer from '../routes/httpServer';
 
 const useAddForm= ({form,url}) => {
-
   const [ isSending, setIsSending ] = useState(false);
-  const [ isSent, setIsSent ] = useState(false);
   async function saveData(data){
     httpServer({
       url,
@@ -33,18 +31,14 @@ const useAddForm= ({form,url}) => {
       await saveData(JSON.stringify(form.getFieldsValue()))
       await sendData(JSON.stringify(form.getFieldsValue()));
       setIsSending(false);
-      setIsSent(true);
+      Message.success({
+        id: 'add',
+        content: '添加成功!',
+      })
     } catch (e) {
       Message.error('校验失败');
       console.log(e);
     }
-  }
-  if (isSent) {
-    Message.success({
-      id: 'add',
-      content: '添加成功!',
-    })
-    setIsSent(false);
   }
   return {isSending, handSubmit};
 }
