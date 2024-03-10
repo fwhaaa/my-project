@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Table, Button, Input, Select, Form } from '@arco-design/web-react';
 import useList from '../../global-hooks/use-list-hook';
 import CommonModal from '../../global-hooks/use-modal-hook';
@@ -11,8 +11,10 @@ function TeachertList() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [currentRecord,setCurrentRecord] =useState(undefined);
   const [searchType,setSearchType] = useState('teachername');
+  const [searchData, setSearchData] = useState();
+  // const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
   const [form] = Form.useForm();
-  const {data,deleteRecord,edit} = useList({
+  const {deleteRecord,edit,data} = useList({
     getListUrl:'/teacher/teacherManagement/list',
     deleteUrl:'/teacher/teacherManagement/delete',
     editUrl: '/teacher/teacherManagement/edit',
@@ -20,7 +22,9 @@ function TeachertList() {
     visible,
     setVisible,
     setConfirmLoading,
-    setDeleteVisible
+    setDeleteVisible,
+    // setData
+
   })
   const formItemLayout = {
     labelCol: {
@@ -75,22 +79,37 @@ function TeachertList() {
       ),
     },
   ];
+  async function handleSearch(search){
+    if(searchType === 'teachername'){
+      console.log(data);
+    setSearchData(data.filter(t => t.teachername.includes(search)));
+    }
+    if(searchType === 'id'){
+      console.log(data);  
+      setSearchData(data.filter(t => (t.id).toString().includes(search)));
+  }
+}
+useEffect(()=>{
+  setSearchData(data)
+ },[data])
+
+  
 
   return (
     <div>
-    <Input.Group compact>
+    <Input.Group compact style={{marginBottom:'16px'}}>
          <Select defaultValue='teachername' onChange={(value)=>{
            setSearchType(value);
          }} showSearch style={{ width: '25%' }}>
            <Select.Option value='teachername' >姓名</Select.Option>
            <Select.Option value='id'>教师编号</Select.Option>
          </Select>
-         {/* <Input style={{ width: '75%' }} placeholder='Please enter an address' onChange={handleSearch} /> */}
+         <Input style={{ width: '75%' }} placeholder='输入搜索内容'  onChange={handleSearch} />
        </Input.Group>
    <Table
      rowKey='id'
      columns={columns}
-     data={data}
+     data={searchData}
    />
    <CommonModal type='edit' setVisible={setVisible} visible={visible} setConfirmLoading={setConfirmLoading} confirmLoading={confirmLoading} onOk={edit}> 
     <Form

@@ -9,7 +9,8 @@ function useList({
     form,
     setVisible,
     setConfirmLoading,
-    setDeleteVisible
+    setDeleteVisible,
+    // setData
 }) {
     console.log(editUrl);
 const [data, setData] = useState();
@@ -87,9 +88,10 @@ const [data, setData] = useState();
 
 
   return {
-    data,
     deleteRecord,
     edit,
+    data,
+    setData
   };
 }
 export default useList;
