@@ -1,51 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { Layout, Menu, Breadcrumb } from '@arco-design/web-react';
-import Menus from './menus';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { PageHeader, Radio } from '@arco-design/web-react';
-import Head from './header';
-import './common.css'
+import React, { useEffect, useState } from "react";
+import { Layout, Menu, Breadcrumb } from "@arco-design/web-react";
+import Menus from "./menus";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { PageHeader, Radio } from "@arco-design/web-react";
+import Head from "./header";
+import "./common.css";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
 const Footer = Layout.Footer;
 const Content = Layout.Content;
 
-
-
 function Root() {
-  const username = localStorage.getItem('username');
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
-  const [collapsed,setCollapsed] = useState(false);
-  function handleCollapsed(){
-   setCollapsed(collapsed => !collapsed );
+  const [collapsed, setCollapsed] = useState(false);
+  function handleCollapsed() {
+    setCollapsed((collapsed) => !collapsed);
   }
-  
+
   function BeforeRouterEnter() {
     const username = localStorage.getItem("username");
     if (!username) {
-     navigate('/login')
+      navigate("/login");
     }
-  } 
+  }
 
-  useEffect(()=>{
+  useEffect(() => {
     BeforeRouterEnter();
-  },[])
-   return (
-        <Layout className='layout-collapse-demo'>
-          <Sider style={{width:'auto'}}>
-            <Menus></Menus>
-          </Sider>
-          <Layout>
-            <Header>
-              <Head></Head>
-            </Header>
-              <Content style={{padding:'20px'}}><Outlet /></Content>
-            </Layout>
-          </Layout>      
-      );
-
+  }, []);
+  return (
+    <Layout className="layout-collapse-demo">
+      <Sider style={{ width: "auto" }}>
+        <Menus></Menus>
+      </Sider>
+      <Layout>
+        <Header>
+          <Head></Head>
+        </Header>
+        <Content style={{ padding: "20px" }}>
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
+  );
 }
-
 
 export default Root;

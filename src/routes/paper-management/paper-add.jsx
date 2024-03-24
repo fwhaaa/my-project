@@ -1,26 +1,29 @@
-import { useState } from 'react';
-import PaperMetaInfo from './meta-info';
-import PaperAddQuestion from './paper-add-question';
+import { useState } from "react";
+import PaperMetaInfo from "./meta-info";
+import PaperAddQuestion from "./paper-add-question";
 
-
-const  PaperAdd = () => {
-
-  const [hasClickButton, setHasClickButton ] = useState(false);
+const PaperAdd = () => {
+  const [hasClickButton, setHasClickButton] = useState(false);
   const [metaInfo, setMetaInfo] = useState();
-  console.log('hasclickbutton',hasClickButton)
-  console.log('metainfo',metaInfo);
-
+  console.log("hasclickbutton", hasClickButton);
+  console.log("metainfo", metaInfo);
 
   return (
     <div>
-   {   hasClickButton 
-      ? 
-      <PaperAddQuestion metaInfo={metaInfo} setMetaInfo={setMetaInfo}></PaperAddQuestion>
-      :
-      <PaperMetaInfo hasClickButton={hasClickButton} setHasClickButton={setHasClickButton} metaInfo={metaInfo} setMetaInfo={setMetaInfo} />
-}
-
+      {hasClickButton ? (
+        <PaperAddQuestion
+          metaInfo={metaInfo}
+          setMetaInfo={setMetaInfo}
+        ></PaperAddQuestion>
+      ) : (
+        <PaperMetaInfo
+          hasClickButton={hasClickButton}
+          setHasClickButton={setHasClickButton}
+          metaInfo={metaInfo}
+          setMetaInfo={setMetaInfo}
+        />
+      )}
     </div>
-    );
-}
+  );
+};
 export default PaperAdd;
