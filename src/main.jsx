@@ -163,20 +163,20 @@ const routes =
                 },
               ],
             },
-            // {
-            //   path: "teacher/management",
-            //   element: <TeacherMangementIndex />,
-            //   children:[
-            //     {
-            //       path: "add",
-            //       element: <TeacherAdd />,
-            //     },
-            //     {
-            //       path: "list",
-            //       element: <TeachertList />
-            //     },
-            //   ]
-            // },
+            {
+              path: "teacher/management",
+              element: <TeacherMangementIndex />,
+              children: [
+                {
+                  path: "add",
+                  element: <TeacherAdd />,
+                },
+                {
+                  path: "list",
+                  element: <TeachertList />,
+                },
+              ],
+            },
             {
               path: "questionbank/management",
               element: <QuestionBankMangementIndex />,

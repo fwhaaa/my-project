@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Login = () => {
+  let myImage = "https://example.com/my-image.jpg";
   const FormItem = Form.Item;
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Login = () => {
     const username = localStorage.getItem("username");
     if (username) {
       navigate("/");
-      //  Message.normal('您已经登陆过了')
+      Message.normal("您已经登陆过了");
     }
   }
 
@@ -34,7 +35,7 @@ const Login = () => {
         } else {
           Message.success("登录成功");
           const username = form.getFieldValue("username");
-          localStorage.setItem("username", username);
+          localStorage.setItem("username", username); 
           localStorage.setItem("password", respData.results[0].password);
           navigate(`/`);
         }
@@ -53,11 +54,14 @@ const Login = () => {
   }, []);
   return (
     <div
+     className="login"
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
+        backgroundImage: "C:/Users/no.27/Downloads/zzpic24637/zzpic24637",
+        // backgroundImage: "C:/Users/no.27/Downloads/zzpic24637/zzpic24637",
       }}
     >
       <Form form={form} style={{ width: "600px" }} autoComplete="off">

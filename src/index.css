@@ -380,3 +380,17 @@ i {
   justify-content: center;
   width: 100%;
 }
+
+.login {
+
+    display: flex;
+    justify-content: "center";
+    align-items: "center";
+    width: 100%;
+    background-image: url("./assets/bg.jpg");
+    /* justify Content: "center",
+    alignItems: "center",
+    width: "100%",
+    backgroundImage: "C:/Users/no.27/Downloads/zzpic24637/zzpic24637", */
+
+  }

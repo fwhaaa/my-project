@@ -52,7 +52,7 @@ const ScoreExamList = () => {
     {
       title: "考试时长",
       dataIndex: "time",
-    },
+    },  
     {
       title: "操作",
       dataIndex: "op",

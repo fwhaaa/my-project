@@ -53,7 +53,6 @@ const Marking = () => {
   }
 
   async function getList() {
-    console.log("@@@@@@paperID", paperId);
     httpServer({
       url: `/paper/paperManagement/list?id=${paperId}`,
       method: "GET",
@@ -63,10 +62,8 @@ const Marking = () => {
         let respData = res.data;
         if (res.status === 200 && respData.respCode === 1) {
           setData(res.data.results);
-          console.log("---resluts", res.data.results);
           res.data.results?.map((v) => {
             const question = JSON.parse(v.questioncontent);
-            console.log("---------question", question);
             setSingle(question["single"]);
             setMultiple(question["multiple"]);
             setJudge(question["judge"]);
@@ -75,7 +72,6 @@ const Marking = () => {
             setMultipleScore(v.multiplescore);
             setJudgeScore(v.judgescore);
             setSaqScore(v.saqscore);
-            console.log("-------v", v);
             setQuestion(question);
           });
         }
@@ -109,11 +105,9 @@ const Marking = () => {
       method: "GET",
     })
       .then((res) => {
-        console.log("-&*……%……&%&……res", res);
         let respData = res.data;
         if (res.status === 200 && respData.respCode === 1) {
           setAnswer(JSON.parse(res.data.results[0].answer));
-          console.log("*&*&&anser", JSON.parse(res.data.results[0].answer));
           form.setFieldsValue(JSON.parse(res.data.results[0].answer));
         }
       })
